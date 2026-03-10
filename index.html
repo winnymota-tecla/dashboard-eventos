@@ -525,7 +525,7 @@ function openStatusModal(e, aba, rowIndex, nome, statusAtual) {
   document.getElementById('status-saving-msg').style.display = 'none';
   document.getElementById('status-overlay').classList.add('open');
 }
-function closeStatusModal() { document.getElementById('status-overlay').classList.remove('open'); }
+function closeStatusModal() { document.getElementById('status-overlay').classList.remove('open'); document.querySelectorAll('.status-opt').forEach(b => { b.disabled=false; b.classList.remove('selected'); }); }
 
 async function selectStatus(novoStatus) {
   document.querySelectorAll('.status-opt').forEach(b => { b.classList.toggle('selected', b.textContent.includes(novoStatus)); b.disabled=true; });
