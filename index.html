@@ -528,7 +528,7 @@ function openStatusModal(e, aba, rowIndex, nome, statusAtual) {
 function closeStatusModal() { document.getElementById('status-overlay').classList.remove('open'); document.querySelectorAll('.status-opt').forEach(b => { b.disabled=false; b.classList.remove('selected'); }); }
 
 async function selectStatus(novoStatus) {
-  document.querySelectorAll('.status-opt').forEach(b => { b.classList.toggle('selected', b.textContent.includes(novoStatus)); b.disabled=true; });
+  document.querySelectorAll('.status-opt').forEach(b => b.classList.toggle('selected', b.textContent.includes(novoStatus)));
   const msg = document.getElementById('status-saving-msg');
   msg.style.display='block'; msg.textContent='Salvando...';
   try {
