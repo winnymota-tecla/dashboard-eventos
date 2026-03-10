@@ -7,145 +7,146 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:#0a0a0f;--surface:#13131c;--surface2:#1a1a26;
-    --border:#1e1e2e;--border2:#2a2a3e;
-    --green:#00e5a0;--yellow:#f5c542;--orange:#ff8c42;
-    --red:#ff4d6d;--blue:#4da6ff;--muted:#555570;
-    --text:#e8e8f0;--text-dim:#9090aa;
+    --bg:#0a0a0f; --surface:#13131c; --surface2:#1a1a26;
+    --border:#1e1e2e; --border2:#2a2a3e;
+    --green:#00e5a0; --yellow:#f5c542; --orange:#ff8c42;
+    --red:#ff4d6d; --blue:#4da6ff; --muted:#555570;
+    --text:#e8e8f0; --text-dim:#9090aa;
   }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding:32px 24px;}
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; padding:32px 24px; }
 
   /* LOADING */
-  #loading{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:16px;}
-  .spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite;}
-  @keyframes spin{to{transform:rotate(360deg);}}
-  .loading-text{font-size:13px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;}
-  #error-banner{display:none;background:rgba(255,77,109,.1);border:1px solid rgba(255,77,109,.3);border-radius:12px;padding:14px 20px;margin-bottom:24px;font-size:13px;color:var(--red);}
+  #loading { position:fixed; inset:0; background:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:999; gap:16px; }
+  .spinner { width:40px; height:40px; border:3px solid var(--border); border-top-color:var(--green); border-radius:50%; animation:spin .8s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .loading-text { font-size:13px; color:var(--text-dim); letter-spacing:2px; text-transform:uppercase; }
+  #error-banner { display:none; background:rgba(255,77,109,.1); border:1px solid rgba(255,77,109,.3); border-radius:12px; padding:14px 20px; margin-bottom:24px; font-size:13px; color:var(--red); }
 
   /* HEADER */
-  .header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px;border-bottom:1px solid var(--border);padding-bottom:24px;flex-wrap:wrap;gap:20px;}
-  .header-left h1{font-family:'Bebas Neue',sans-serif;font-size:56px;letter-spacing:4px;line-height:1;color:#fff;}
-  .header-left span{font-size:13px;color:var(--text-dim);letter-spacing:3px;text-transform:uppercase;display:block;margin-top:4px;}
-  .summary-pills{display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end;align-items:center;}
-  .pill{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 20px;text-align:center;}
-  .pill .val{font-family:'Bebas Neue',sans-serif;font-size:30px;line-height:1;display:block;}
-  .pill .lbl{font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.5px;margin-top:4px;display:block;}
-  .pill.g .val{color:var(--green);}.pill.y .val{color:var(--yellow);}.pill.b .val{color:var(--blue);}
-  .refresh-btn{display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid var(--border2);color:var(--text-dim);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:10px 18px;border-radius:12px;cursor:pointer;transition:all .2s;}
-  .refresh-btn:hover{border-color:var(--green);color:var(--green);}
-  .refresh-btn.spinning svg{animation:spin .8s linear infinite;}
+  .header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:40px; border-bottom:1px solid var(--border); padding-bottom:24px; flex-wrap:wrap; gap:20px; }
+  .header-left h1 { font-family:'Bebas Neue',sans-serif; font-size:56px; letter-spacing:4px; line-height:1; color:#fff; }
+  .header-left span { font-size:13px; color:var(--text-dim); letter-spacing:3px; text-transform:uppercase; display:block; margin-top:4px; }
+  .summary-pills { display:flex; gap:12px; flex-wrap:wrap; justify-content:flex-end; align-items:center; }
+  .pill { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 20px; text-align:center; }
+  .pill .val { font-family:'Bebas Neue',sans-serif; font-size:30px; line-height:1; display:block; }
+  .pill .lbl { font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1.5px; margin-top:4px; display:block; }
+  .pill.g .val { color:var(--green); } .pill.y .val { color:var(--yellow); } .pill.b .val { color:var(--blue); }
+  .refresh-btn { display:inline-flex; align-items:center; gap:8px; background:transparent; border:1px solid var(--border2); color:var(--text-dim); font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; padding:10px 18px; border-radius:12px; cursor:pointer; transition:all .2s; }
+  .refresh-btn:hover { border-color:var(--green); color:var(--green); }
+  .refresh-btn.spinning svg { animation:spin .8s linear infinite; }
 
-  /* LEGEND */
-  .legend{display:flex;gap:20px;margin-bottom:24px;flex-wrap:wrap;}
-  .legend-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-dim);}
-  .legend-dot{width:9px;height:9px;border-radius:50%;}
+  /* LEGENDA */
+  .legend { display:flex; gap:20px; margin-bottom:24px; flex-wrap:wrap; }
+  .legend-item { display:flex; align-items:center; gap:7px; font-size:12px; color:var(--text-dim); }
+  .legend-dot { width:9px; height:9px; border-radius:50%; }
 
   /* CARDS */
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;}
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;position:relative;overflow:hidden;cursor:pointer;transition:border-color .2s,transform .2s,box-shadow .2s;}
-  .card:hover{border-color:#3a3a55;transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4);}
-  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0;}
-  .card.lotado::before{background:var(--green);}.card.quase::before{background:var(--yellow);}.card.vazio::before{background:var(--blue);}
-  .card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;}
-  .card-date{font-size:11px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;background:rgba(255,255,255,.04);padding:4px 10px;border-radius:20px;}
-  .vagas-badge{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;}
-  .badge-livre{background:rgba(77,166,255,.15);color:var(--blue);}.badge-cheio{background:rgba(0,229,160,.12);color:var(--green);}
-  .card h2{font-size:17px;font-weight:600;margin-bottom:16px;line-height:1.3;color:#fff;}
-  .progress-bar{height:6px;background:var(--border);border-radius:99px;overflow:hidden;margin-bottom:10px;display:flex;}
-  .bar-seg{height:100%;}.bar-conf{background:var(--green);}.bar-pend{background:var(--yellow);}.bar-aprov{background:var(--orange);}.bar-rec{background:var(--red);}
-  .stats-row{display:flex;gap:6px;flex-wrap:wrap;}
-  .stat-chip{display:flex;align-items:center;gap:5px;font-size:12px;padding:4px 9px;border-radius:8px;font-weight:500;}
-  .stat-chip .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-  .chip-green{background:rgba(0,229,160,.1);color:var(--green);}.chip-green .dot{background:var(--green);}
-  .chip-yellow{background:rgba(245,197,66,.12);color:var(--yellow);}.chip-yellow .dot{background:var(--yellow);}
-  .chip-orange{background:rgba(255,140,66,.14);color:var(--orange);}.chip-orange .dot{background:var(--orange);}
-  .chip-red{background:rgba(255,77,109,.12);color:var(--red);}.chip-red .dot{background:var(--red);}
-  .chip-muted{background:rgba(255,255,255,.05);color:var(--text-dim);}.chip-muted .dot{background:var(--muted);}
-  .no-data{font-size:12px;color:var(--muted);font-style:italic;padding:4px 0;}
-  .click-hint{font-size:11px;color:var(--muted);margin-top:12px;text-align:right;letter-spacing:.5px;}
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:16px; }
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:20px; position:relative; overflow:hidden; cursor:pointer; transition:border-color .2s,transform .2s,box-shadow .2s; }
+  .card:hover { border-color:#3a3a55; transform:translateY(-3px); box-shadow:0 12px 40px rgba(0,0,0,.4); }
+  .card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; border-radius:16px 16px 0 0; }
+  .card.lotado::before { background:var(--green); } .card.quase::before { background:var(--yellow); } .card.vazio::before { background:var(--blue); }
+  .card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
+  .card-date { font-size:11px; color:var(--text-dim); letter-spacing:2px; text-transform:uppercase; background:rgba(255,255,255,.04); padding:4px 10px; border-radius:20px; }
+  .vagas-badge { font-size:11px; font-weight:600; padding:4px 10px; border-radius:20px; }
+  .badge-livre { background:rgba(77,166,255,.15); color:var(--blue); } .badge-cheio { background:rgba(0,229,160,.12); color:var(--green); }
+  .card h2 { font-size:17px; font-weight:600; margin-bottom:16px; line-height:1.3; color:#fff; }
+  .progress-bar { height:6px; background:var(--border); border-radius:99px; overflow:hidden; margin-bottom:10px; display:flex; }
+  .bar-seg { height:100%; } .bar-conf { background:var(--green); } .bar-pend { background:var(--yellow); } .bar-aprov { background:var(--orange); } .bar-rec { background:var(--red); }
+  .stats-row { display:flex; gap:6px; flex-wrap:wrap; }
+  .stat-chip { display:flex; align-items:center; gap:5px; font-size:12px; padding:4px 9px; border-radius:8px; font-weight:500; }
+  .stat-chip .dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+  .chip-green { background:rgba(0,229,160,.1); color:var(--green); } .chip-green .dot { background:var(--green); }
+  .chip-yellow { background:rgba(245,197,66,.12); color:var(--yellow); } .chip-yellow .dot { background:var(--yellow); }
+  .chip-orange { background:rgba(255,140,66,.14); color:var(--orange); } .chip-orange .dot { background:var(--orange); }
+  .chip-red { background:rgba(255,77,109,.12); color:var(--red); } .chip-red .dot { background:var(--red); }
+  .chip-muted { background:rgba(255,255,255,.05); color:var(--text-dim); } .chip-muted .dot { background:var(--muted); }
+  .no-data { font-size:12px; color:var(--muted); font-style:italic; padding:4px 0; }
+  .click-hint { font-size:11px; color:var(--muted); margin-top:12px; text-align:right; }
 
-  /* MODAL */
-  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:100;align-items:center;justify-content:center;padding:24px;}
-  .overlay.open{display:flex;}
-  .modal{background:var(--surface);border:1px solid var(--border2);border-radius:20px;width:100%;max-width:800px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;animation:slideUp .25s ease;}
-  @keyframes slideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-  .modal-header{padding:24px 28px 20px;border-bottom:1px solid var(--border);flex-shrink:0;}
-  .modal-header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;}
-  .modal-title-area h2{font-size:22px;font-weight:700;color:#fff;}
-  .modal-title-area span{font-size:12px;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;}
-  .modal-actions{display:flex;align-items:center;gap:10px;}
-  .add-guest-btn{display:inline-flex;align-items:center;gap:7px;background:var(--green);color:#0a0a0f;font-size:13px;font-weight:700;padding:9px 16px;border-radius:10px;border:none;cursor:pointer;transition:opacity .2s;}
-  .add-guest-btn:hover{opacity:.85;}
-  .close-btn{background:rgba(255,255,255,.06);border:none;color:var(--text-dim);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s;flex-shrink:0;}
-  .close-btn:hover{background:rgba(255,255,255,.12);color:#fff;}
-  .modal-stats{display:flex;gap:10px;flex-wrap:wrap;}
-  .mstat{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 16px;text-align:center;}
-  .mstat .mv{font-family:'Bebas Neue',sans-serif;font-size:24px;line-height:1;display:block;}
-  .mstat .ml{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;display:block;margin-top:2px;}
-  .modal-progress{margin-top:14px;height:5px;background:var(--border);border-radius:99px;overflow:hidden;display:flex;}
-  .modal-body{overflow-y:auto;padding:20px 28px 28px;flex:1;}
-  .filter-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
-  .tab{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text-dim);transition:all .15s;}
-  .tab:hover{border-color:var(--border2);color:var(--text);}.tab.active{background:rgba(255,255,255,.08);border-color:#3a3a55;color:#fff;}
-  .guest-list{display:flex;flex-direction:column;gap:8px;}
-  .guest-row{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:14px;transition:border-color .15s;}
-  .guest-row:hover{border-color:var(--border2);}
-  .guest-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;text-transform:uppercase;}
-  .guest-info{flex:1;min-width:0;}.guest-name{font-size:14px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.guest-sub{font-size:12px;color:var(--text-dim);margin-top:2px;}
-  .guest-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;}
-  .status-tag{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;}
-  .s-conf{background:rgba(0,229,160,.12);color:var(--green);}.s-pend{background:rgba(245,197,66,.14);color:var(--yellow);}
-  .s-aprov{background:rgba(255,140,66,.14);color:var(--orange);}.s-rec{background:rgba(255,77,109,.14);color:var(--red);}.s-none{background:rgba(255,255,255,.05);color:var(--muted);}
-  .resp-tag{font-size:11px;color:var(--muted);}
-  .change-status-btn{font-size:11px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text-dim);padding:3px 10px;border-radius:8px;cursor:pointer;transition:all .15s;white-space:nowrap;}
-  .change-status-btn:hover{border-color:var(--blue);color:var(--blue);}
-  .empty-state{text-align:center;padding:40px;color:var(--muted);font-size:14px;}
+  /* MODAL CONVIDADOS */
+  .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); backdrop-filter:blur(6px); z-index:100; align-items:center; justify-content:center; padding:24px; }
+  .overlay.open { display:flex; }
+  .modal { background:var(--surface); border:1px solid var(--border2); border-radius:20px; width:100%; max-width:800px; max-height:90vh; overflow:hidden; display:flex; flex-direction:column; animation:slideUp .25s ease; }
+  @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  .modal-header { padding:24px 28px 20px; border-bottom:1px solid var(--border); flex-shrink:0; }
+  .modal-header-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:18px; }
+  .modal-title-area h2 { font-size:22px; font-weight:700; color:#fff; }
+  .modal-title-area span { font-size:12px; color:var(--text-dim); letter-spacing:2px; text-transform:uppercase; }
+  .modal-actions { display:flex; align-items:center; gap:10px; }
+  .add-guest-btn { display:inline-flex; align-items:center; gap:7px; background:var(--green); color:#0a0a0f; font-size:13px; font-weight:700; padding:9px 16px; border-radius:10px; border:none; cursor:pointer; transition:opacity .2s; }
+  .add-guest-btn:hover { opacity:.85; }
+  .close-btn { background:rgba(255,255,255,.06); border:none; color:var(--text-dim); width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:all .2s; }
+  .close-btn:hover { background:rgba(255,255,255,.12); color:#fff; }
+  .modal-stats { display:flex; gap:10px; flex-wrap:wrap; }
+  .mstat { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:10px 16px; text-align:center; }
+  .mstat .mv { font-family:'Bebas Neue',sans-serif; font-size:24px; line-height:1; display:block; }
+  .mstat .ml { font-size:10px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; display:block; margin-top:2px; }
+  .modal-progress { margin-top:14px; height:5px; background:var(--border); border-radius:99px; overflow:hidden; display:flex; }
+  .modal-body { overflow-y:auto; padding:20px 28px 28px; flex:1; }
+  .filter-tabs { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
+  .tab { padding:6px 14px; border-radius:20px; font-size:12px; font-weight:500; cursor:pointer; border:1px solid var(--border); background:transparent; color:var(--text-dim); transition:all .15s; }
+  .tab:hover { border-color:var(--border2); color:var(--text); } .tab.active { background:rgba(255,255,255,.08); border-color:#3a3a55; color:#fff; }
+  .guest-list { display:flex; flex-direction:column; gap:8px; }
+  .guest-row { background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:12px 16px; display:flex; align-items:center; gap:14px; transition:border-color .15s; }
+  .guest-row:hover { border-color:var(--border2); }
+  .guest-avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; text-transform:uppercase; }
+  .guest-info { flex:1; min-width:0; }
+  .guest-name { font-size:14px; font-weight:600; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .guest-sub { font-size:12px; color:var(--text-dim); margin-top:2px; }
+  .guest-right { display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0; }
+  .status-tag { font-size:11px; font-weight:600; padding:3px 10px; border-radius:20px; white-space:nowrap; }
+  .s-conf { background:rgba(0,229,160,.12); color:var(--green); }
+  .s-pend { background:rgba(245,197,66,.14); color:var(--yellow); }
+  .s-aprov { background:rgba(255,140,66,.14); color:var(--orange); }
+  .s-rec { background:rgba(255,77,109,.14); color:var(--red); }
+  .s-none { background:rgba(255,255,255,.05); color:var(--muted); }
+  .resp-tag { font-size:11px; color:var(--muted); }
+  .change-status-btn { font-size:11px; background:rgba(255,255,255,.05); border:1px solid var(--border); color:var(--text-dim); padding:3px 10px; border-radius:8px; cursor:pointer; transition:all .15s; }
+  .change-status-btn:hover { border-color:var(--blue); color:var(--blue); }
+  .empty-state { text-align:center; padding:40px; color:var(--muted); font-size:14px; }
 
-  /* FORM MODAL */
-  .form-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);z-index:200;align-items:center;justify-content:center;padding:24px;}
-  .form-overlay.open{display:flex;}
-  .form-modal{background:var(--surface);border:1px solid var(--border2);border-radius:20px;width:100%;max-width:500px;padding:28px;animation:slideUp .2s ease;}
-  .form-modal h3{font-size:18px;font-weight:700;color:#fff;margin-bottom:4px;}
-  .form-modal .form-subtitle{font-size:13px;color:var(--text-dim);margin-bottom:24px;}
-  .form-group{margin-bottom:16px;}
-  .form-group label{display:block;font-size:12px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
-  .form-group input,.form-group select{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px 14px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;}
-  .form-group input:focus,.form-group select:focus{border-color:var(--green);}
-  .form-group select option{background:var(--surface2);}
-  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-  .form-actions{display:flex;gap:10px;margin-top:24px;}
-  .btn-primary{flex:1;background:var(--green);color:#0a0a0f;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s;}
-  .btn-primary:hover{opacity:.85;}
-  .btn-primary:disabled{opacity:.5;cursor:not-allowed;}
-  .btn-secondary{background:transparent;color:var(--text-dim);border:1px solid var(--border2);border-radius:10px;padding:12px 20px;font-size:14px;cursor:pointer;transition:all .2s;}
-  .btn-secondary:hover{border-color:var(--border);color:var(--text);}
+  /* MODAL ADICIONAR CONVIDADO */
+  .form-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.8); backdrop-filter:blur(8px); z-index:200; align-items:center; justify-content:center; padding:24px; }
+  .form-overlay.open { display:flex; }
+  .form-modal { background:var(--surface); border:1px solid var(--border2); border-radius:20px; width:100%; max-width:500px; padding:28px; animation:slideUp .2s ease; }
+  .form-modal h3 { font-size:18px; font-weight:700; color:#fff; margin-bottom:4px; }
+  .form-subtitle { font-size:13px; color:var(--text-dim); margin-bottom:24px; }
+  .form-group { margin-bottom:16px; }
+  .form-group label { display:block; font-size:12px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+  .form-group input, .form-group select { width:100%; background:var(--surface2); border:1px solid var(--border2); border-radius:10px; padding:10px 14px; color:var(--text); font-size:14px; font-family:'DM Sans',sans-serif; outline:none; transition:border-color .2s; }
+  .form-group input:focus, .form-group select:focus { border-color:var(--green); }
+  .form-group select option { background:var(--surface2); }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .form-actions { display:flex; gap:10px; margin-top:24px; }
+  .btn-primary { flex:1; background:var(--green); color:#0a0a0f; border:none; border-radius:10px; padding:12px; font-size:14px; font-weight:700; cursor:pointer; transition:opacity .2s; }
+  .btn-primary:hover { opacity:.85; } .btn-primary:disabled { opacity:.5; cursor:not-allowed; }
+  .btn-secondary { background:transparent; color:var(--text-dim); border:1px solid var(--border2); border-radius:10px; padding:12px 20px; font-size:14px; cursor:pointer; transition:all .2s; }
+  .btn-secondary:hover { border-color:var(--border); color:var(--text); }
+  .saving-msg { display:none; text-align:center; font-size:13px; color:var(--text-dim); padding:8px; }
 
-  /* STATUS MODAL */
-  .status-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);z-index:300;align-items:center;justify-content:center;padding:24px;}
-  .status-overlay.open{display:flex;}
-  .status-modal{background:var(--surface);border:1px solid var(--border2);border-radius:20px;width:100%;max-width:420px;padding:28px;animation:slideUp .2s ease;}
-  .status-modal h3{font-size:16px;font-weight:700;color:#fff;margin-bottom:4px;}
-  .status-modal .guest-label{font-size:13px;color:var(--text-dim);margin-bottom:20px;}
-  .status-options{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
-  .status-opt{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;cursor:pointer;font-size:14px;font-weight:500;transition:all .15s;text-align:left;}
-  .status-opt:hover{border-color:var(--border2);background:#1f1f2e;}
-  .status-opt.selected{border-color:var(--green);background:rgba(0,229,160,.08);color:var(--green);}
-  .saving-indicator{display:none;text-align:center;font-size:13px;color:var(--text-dim);padding:8px;}
+  /* MODAL ALTERAR STATUS */
+  .status-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.8); backdrop-filter:blur(8px); z-index:300; align-items:center; justify-content:center; padding:24px; }
+  .status-overlay.open { display:flex; }
+  .status-modal { background:var(--surface); border:1px solid var(--border2); border-radius:20px; width:100%; max-width:400px; padding:28px; animation:slideUp .2s ease; }
+  .status-modal h3 { font-size:16px; font-weight:700; color:#fff; margin-bottom:4px; }
+  .status-guest { font-size:13px; color:var(--text-dim); margin-bottom:20px; }
+  .status-options { display:flex; flex-direction:column; gap:8px; margin-bottom:20px; }
+  .status-opt { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:12px 16px; cursor:pointer; font-size:14px; font-weight:500; transition:all .15s; text-align:left; }
+  .status-opt:hover { border-color:var(--border2); }
+  .status-opt.selected { border-color:var(--green); background:rgba(0,229,160,.08); color:var(--green); }
 </style>
 </head>
 <body>
 
-<!-- LOADING -->
 <div id="loading">
   <div class="spinner"></div>
   <div class="loading-text">Carregando dados da planilha...</div>
 </div>
 
-<!-- ERRO -->
 <div id="error-banner"></div>
 
-<!-- HEADER -->
 <div class="header">
   <div class="header-left">
     <h1>MARÇO 2026</h1>
@@ -174,7 +175,7 @@
 <div class="grid" id="cards"></div>
 
 <!-- MODAL CONVIDADOS -->
-<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-header">
       <div class="modal-header-top">
@@ -240,7 +241,7 @@
       <button class="btn-secondary" onclick="closeAddGuest()">Cancelar</button>
       <button class="btn-primary" id="btn-salvar" onclick="saveGuest()">Salvar convidado</button>
     </div>
-    <div class="saving-indicator" id="saving-indicator">Salvando na planilha...</div>
+    <div class="saving-msg" id="saving-msg">Salvando na planilha...</div>
   </div>
 </div>
 
@@ -248,7 +249,7 @@
 <div class="status-overlay" id="status-overlay">
   <div class="status-modal">
     <h3>Alterar status</h3>
-    <div class="guest-label" id="status-guest-label"></div>
+    <div class="status-guest" id="status-guest-label"></div>
     <div class="status-options">
       <button class="status-opt" onclick="selectStatus('Aguardando aprovação')">⏳ Aguardando aprovação</button>
       <button class="status-opt" onclick="selectStatus('Convidado')">★ Convidado</button>
@@ -261,106 +262,95 @@
     <div class="form-actions">
       <button class="btn-secondary" onclick="closeStatusModal()">Cancelar</button>
     </div>
-    <div class="saving-indicator" id="status-saving"></div>
+    <div class="saving-msg" id="status-saving-msg"></div>
   </div>
 </div>
 
 <script>
-// ── CONFIGURAÇÃO ─────────────────────────────────────────────
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx5Kp6Mj6xPYbaVhMKI7lloVtsXhTre6ltkapUJ-RmXw3e7cjnwuC-oF9Ww75uhX1lxJA/exec';
+const API = 'https://script.google.com/macros/s/AKfycbx5Kp6Mj6xPYbaVhMKI7lloVtsXhTre6ltkapUJ-RmXw3e7cjnwuC-oF9Ww75uhX1lxJA/exec';
 
-// Datas dos eventos (para exibir no card)
-const DATAS_EVENTOS = {
-  'Fortaleza x Ceará':           '01/03',
-  'Show Luan Santana':           '14/03',
-  'Palmeiras x Mirassol':        '15/03',
-  'Experiência Cariani':         '17/03',
-  'Palmeiras x Botafogo':        '18/03',
-  'Santos X Internacional':      '18/03',
-  'Gilberto Gil':                '28/03',
-  'Santos X Corinthians 30/03':  '30/03',
-  'Fortaleza x Cuiabá':          '31/03',
+// Datas de exibição por nome do evento
+const DATAS = {
+  'Fortaleza x Ceará':          '01/03',
+  'Show Luan Santana':          '14/03',
+  'Palmeiras x Mirassol':       '15/03',
+  'Experiência Cariani':        '17/03',
+  'Palmeiras x Botafogo':       '18/03',
+  'Santos X Internacional':     '18/03',
+  'Confraria CEO':              '26/03',
+  'Gilberto Gil':               '28/03',
+  'Santos X Corinthians 30/03': '30/03',
+  'Fortaleza x Cuiabá':         '31/03',
 };
 
-// Eventos fixos (não vêm da planilha)
-const EVENTOS_FIXOS = [
-  {nome:'Confraria CEO',data:'26/03',vagas:8,conf:0,pend:0,aprov:0,rec:0,bloqueado:true,bloqueadoMsg:'🔒 Externo',bloqueadoDesc:'Convites não são feitos pela Tecla',guests:[]},
+// Evento fixo que não vem da planilha
+const FIXOS = [
+  { nome:'Confraria CEO', vagas:8, conf:0, pend:0, aprov:0, rec:0, guests:[],
+    bloqueado:true, bloqueadoMsg:'🔒 Externo', bloqueadoDesc:'Convites não são feitos pela Tecla' }
 ];
 
-// ── ESTADO ───────────────────────────────────────────────────
-let allEvents = [];
-let currentEventIdx = null;
-let currentFilter = 'todos';
-let statusEditTarget = null; // { aba, rowIndex, nome }
-
-// ── HELPERS ──────────────────────────────────────────────────
 const ACOLORS = ['#1a6b4a','#4a3a6b','#6b3a3a','#3a4a6b','#6b5a1a','#1a4a6b','#6b3a5a','#3a6b3a'];
-const avatarColor = n => ACOLORS[(n.charCodeAt(0) + (n.charCodeAt(1) || 0)) % ACOLORS.length];
-const initials = n => n.split(' ').slice(0,2).map(w => w[0] || '').join('').toUpperCase();
+const avatarColor = n => ACOLORS[(n.charCodeAt(0) + (n.charCodeAt(1)||0)) % ACOLORS.length];
+const initials = n => n.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
 
-const STATUS_CLASS = s => {
-  if (!s || s === '—') return 's-none';
+const statusClass = s => {
+  if (!s || s==='—') return 's-none';
   const l = s.toLowerCase();
-  if (l.includes('confirmado') || l.includes('cadastrado')) return 's-conf';
-  if (l.includes('aprovado') || l.includes('convidado')) return 's-pend';
-  if (l.includes('aguardando')) return 's-aprov';
-  if (l.includes('negado') || l.includes('recusou')) return 's-rec';
+  if (l.includes('confirmado')||l.includes('cadastrado')) return 's-conf';
+  if (l.includes('aprovado')||l.includes('convidado'))    return 's-pend';
+  if (l.includes('aguardando'))                           return 's-aprov';
+  if (l.includes('negado')||l.includes('recusou'))        return 's-rec';
   return 's-none';
 };
-const STATUS_GROUP = s => {
-  if (!s || s === '—') return 'outros';
+const statusGroup = s => {
+  if (!s || s==='—') return 'outros';
   const l = s.toLowerCase();
-  if (l.includes('confirmado') || l.includes('cadastrado')) return 'conf';
-  if (l.includes('aprovado') || l.includes('convidado')) return 'pend';
-  if (l.includes('aguardando')) return 'aprov';
-  if (l.includes('negado') || l.includes('recusou')) return 'rec';
+  if (l.includes('confirmado')||l.includes('cadastrado')) return 'conf';
+  if (l.includes('aprovado')||l.includes('convidado'))    return 'pend';
+  if (l.includes('aguardando'))                           return 'aprov';
+  if (l.includes('negado')||l.includes('recusou'))        return 'rec';
   return 'outros';
 };
 
-// ── CARREGAR DADOS ───────────────────────────────────────────
+let allEvents = [], currentIdx = null, currentFilter = 'todos', statusTarget = null;
+
+// ── CARREGAR ─────────────────────────────────────────────────
 async function loadDashboard() {
   const btn = document.querySelector('.refresh-btn');
   btn.classList.add('spinning');
   document.getElementById('error-banner').style.display = 'none';
-
   try {
-    const res = await fetch(APPS_SCRIPT_URL + '?action=getDashboard');
+    const res  = await fetch(API + '?action=getDashboard');
     const data = await res.json();
-    if (!data.ok) throw new Error(data.error || 'Erro desconhecido');
-
-    // Adiciona datas aos eventos da planilha
-    const eventosSheet = data.eventos.map(ev => ({
-      ...ev,
-      data: DATAS_EVENTOS[ev.nome] || '—',
-    }));
-
-    allEvents = [...eventosSheet, ...EVENTOS_FIXOS];
-    renderDashboard();
+    if (!data.ok) throw new Error(data.error);
+    allEvents = [
+      ...data.eventos.map(ev => ({ ...ev, data: DATAS[ev.nome] || '—' })),
+      ...FIXOS.map(ev => ({ ...ev, data: DATAS[ev.nome] || '—' }))
+    ];
+    render();
     document.getElementById('loading').style.display = 'none';
-  } catch (err) {
+  } catch(err) {
     document.getElementById('loading').style.display = 'none';
-    const banner = document.getElementById('error-banner');
-    banner.style.display = 'block';
-    banner.textContent = '⚠️ Erro ao carregar dados: ' + err.message + '. Verifique a URL do Apps Script.';
+    const b = document.getElementById('error-banner');
+    b.style.display = 'block';
+    b.textContent = '⚠️ Erro ao carregar dados: ' + err.message;
   } finally {
     btn.classList.remove('spinning');
   }
 }
 
-// ── RENDERIZAR DASHBOARD ─────────────────────────────────────
-function renderDashboard() {
+// ── RENDERIZAR CARDS ─────────────────────────────────────────
+function render() {
   const container = document.getElementById('cards');
   container.innerHTML = '';
-
-  let totalConf = 0, totalPend = 0, totalLivres = 0;
+  let tConf=0, tPend=0, tLivres=0;
 
   allEvents.forEach((ev, idx) => {
-    const [d, m] = (ev.data || '01/03').split('/').map(Number);
-    const passado = new Date(2026, m - 1, d) < new Date(2026, 2, 10);
-
-    totalConf  += ev.conf || 0;
-    totalPend  += ev.pend || 0;
-    totalLivres += Math.max(0, (ev.vagas || 0) - (ev.conf || 0) - (ev.pend || 0) - (ev.aprov || 0));
+    const [d,m] = (ev.data||'01/03').split('/').map(Number);
+    const passado = new Date(2026,m-1,d) < new Date(2026,2,10);
+    tConf   += ev.conf||0;
+    tPend   += ev.pend||0;
+    tLivres += Math.max(0,(ev.vagas||0)-(ev.conf||0)-(ev.pend||0)-(ev.aprov||0));
 
     if (passado) {
       container.innerHTML += `
@@ -371,7 +361,6 @@ function renderDashboard() {
         </div>`;
       return;
     }
-
     if (ev.bloqueado) {
       container.innerHTML += `
         <div class="card" style="opacity:.55;cursor:default;">
@@ -383,29 +372,20 @@ function renderDashboard() {
     }
 
     const livres = Math.max(0, ev.vagas - ev.conf - ev.pend - ev.aprov);
-    const pC = Math.min((ev.conf / ev.vagas) * 100, 100);
-    const pP = Math.min((ev.pend / ev.vagas) * 100, 100 - pC);
-    const pA = Math.min((ev.aprov / ev.vagas) * 100, 100 - pC - pP);
-    const pR = Math.min((ev.rec / ev.vagas) * 100, 100 - pC - pP - pA);
-    const semDados = ev.conf === 0 && ev.pend === 0 && ev.aprov === 0 && ev.rec === 0;
-
-    let estado = 'vazio';
-    if (ev.conf + ev.pend + ev.aprov >= ev.vagas) estado = 'lotado';
-    else if (ev.conf + ev.pend + ev.aprov > 0) estado = 'quase';
-
-    const badge = livres > 0
-      ? `<span class="vagas-badge badge-livre">${livres} vaga${livres > 1 ? 's' : ''} livre${livres > 1 ? 's' : ''}</span>`
-      : `<span class="vagas-badge badge-cheio">Lotado</span>`;
-
-    const stats = semDados
-      ? `<p class="no-data">Nenhum convidado cadastrado ainda</p>`
-      : `<div class="stats-row">
-          ${ev.conf  > 0 ? `<div class="stat-chip chip-green"><span class="dot"></span>${ev.conf} confirmado${ev.conf > 1 ? 's' : ''}</div>` : ''}
-          ${ev.pend  > 0 ? `<div class="stat-chip chip-yellow"><span class="dot"></span>${ev.pend} convidado${ev.pend > 1 ? 's' : ''}</div>` : ''}
-          ${ev.aprov > 0 ? `<div class="stat-chip chip-orange"><span class="dot"></span>${ev.aprov} aguardando</div>` : ''}
-          ${ev.rec   > 0 ? `<div class="stat-chip chip-red"><span class="dot"></span>${ev.rec} recusou</div>` : ''}
-          ${livres   > 0 ? `<div class="stat-chip chip-muted"><span class="dot"></span>${livres} livre${livres > 1 ? 's' : ''}</div>` : ''}
-        </div>`;
+    const pC = Math.min((ev.conf/ev.vagas)*100,100);
+    const pP = Math.min((ev.pend/ev.vagas)*100,100-pC);
+    const pA = Math.min((ev.aprov/ev.vagas)*100,100-pC-pP);
+    const pR = Math.min((ev.rec/ev.vagas)*100,100-pC-pP-pA);
+    const estado = ev.conf+ev.pend+ev.aprov >= ev.vagas ? 'lotado' : ev.conf+ev.pend+ev.aprov > 0 ? 'quase' : 'vazio';
+    const badge  = livres > 0 ? `<span class="vagas-badge badge-livre">${livres} vaga${livres>1?'s':''} livre${livres>1?'s':''}</span>` : `<span class="vagas-badge badge-cheio">Lotado</span>`;
+    const semDados = ev.conf===0 && ev.pend===0 && ev.aprov===0 && ev.rec===0;
+    const chips = semDados ? `<p class="no-data">Nenhum convidado cadastrado ainda</p>` : `<div class="stats-row">
+      ${ev.conf  > 0 ? `<div class="stat-chip chip-green"><span class="dot"></span>${ev.conf} confirmado${ev.conf>1?'s':''}</div>` : ''}
+      ${ev.pend  > 0 ? `<div class="stat-chip chip-yellow"><span class="dot"></span>${ev.pend} convidado${ev.pend>1?'s':''}</div>` : ''}
+      ${ev.aprov > 0 ? `<div class="stat-chip chip-orange"><span class="dot"></span>${ev.aprov} aguardando</div>` : ''}
+      ${ev.rec   > 0 ? `<div class="stat-chip chip-red"><span class="dot"></span>${ev.rec} recusou</div>` : ''}
+      ${livres   > 0 ? `<div class="stat-chip chip-muted"><span class="dot"></span>${livres} livre${livres>1?'s':''}</div>` : ''}
+    </div>`;
 
     container.innerHTML += `
       <div class="card ${estado}" onclick="openModal(${idx})">
@@ -418,27 +398,25 @@ function renderDashboard() {
             <div class="bar-seg bar-aprov" style="width:${pA}%"></div>
             <div class="bar-seg bar-rec"   style="width:${pR}%"></div>
           </div>
-          ${stats}
+          ${chips}
         </div>
         <p class="click-hint">Ver convidados →</p>
       </div>`;
   });
 
-  document.getElementById('total-eventos').textContent = allEvents.filter(e => !e.bloqueado).length;
-  document.getElementById('total-conf').textContent = totalConf;
-  document.getElementById('total-pend').textContent = totalPend;
-  document.getElementById('total-livres').textContent = totalLivres;
+  document.getElementById('total-eventos').textContent = allEvents.filter(e=>!e.bloqueado).length;
+  document.getElementById('total-conf').textContent    = tConf;
+  document.getElementById('total-pend').textContent    = tPend;
+  document.getElementById('total-livres').textContent  = tLivres;
 }
 
 // ── MODAL CONVIDADOS ─────────────────────────────────────────
 function openModal(idx) {
-  currentEventIdx = idx;
+  currentIdx = idx;
   const ev = allEvents[idx];
   const livres = Math.max(0, ev.vagas - ev.conf - ev.pend - ev.aprov);
-
-  document.getElementById('modal-date').textContent = ev.data + ' · Março 2026';
+  document.getElementById('modal-date').textContent  = ev.data + ' · Março 2026';
   document.getElementById('modal-title').textContent = ev.nome;
-
   document.getElementById('modal-stats').innerHTML = `
     <div class="mstat"><span class="mv" style="color:var(--text)">${ev.vagas}</span><span class="ml">Total vagas</span></div>
     <div class="mstat"><span class="mv" style="color:var(--green)">${ev.conf}</span><span class="ml">Confirmados</span></div>
@@ -446,86 +424,67 @@ function openModal(idx) {
     ${ev.aprov > 0 ? `<div class="mstat"><span class="mv" style="color:var(--orange)">${ev.aprov}</span><span class="ml">Aguardando</span></div>` : ''}
     ${ev.rec   > 0 ? `<div class="mstat"><span class="mv" style="color:var(--red)">${ev.rec}</span><span class="ml">Recusaram</span></div>` : ''}
     <div class="mstat"><span class="mv" style="color:var(--blue)">${livres}</span><span class="ml">Vagas livres</span></div>`;
-
-  const pC = Math.min((ev.conf / ev.vagas) * 100, 100);
-  const pP = Math.min((ev.pend / ev.vagas) * 100, 100 - pC);
-  const pA = Math.min((ev.aprov / ev.vagas) * 100, 100 - pC - pP);
-  const pR = Math.min((ev.rec / ev.vagas) * 100, 100 - pC - pP - pA);
+  const pC=Math.min((ev.conf/ev.vagas)*100,100), pP=Math.min((ev.pend/ev.vagas)*100,100-pC);
+  const pA=Math.min((ev.aprov/ev.vagas)*100,100-pC-pP), pR=Math.min((ev.rec/ev.vagas)*100,100-pC-pP-pA);
   document.getElementById('modal-progress').innerHTML = `
     <div class="bar-seg bar-conf"  style="width:${pC}%"></div>
     <div class="bar-seg bar-pend"  style="width:${pP}%"></div>
     <div class="bar-seg bar-aprov" style="width:${pA}%"></div>
     <div class="bar-seg bar-rec"   style="width:${pR}%"></div>`;
-
   currentFilter = 'todos';
-  renderGuestList(ev);
+  renderGuests(ev);
   document.getElementById('overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
-function renderGuestList(ev) {
-  const g = { conf:0, pend:0, aprov:0, rec:0, outros:0 };
-  ev.guests.forEach(x => g[STATUS_GROUP(x.status)]++);
-
+function renderGuests(ev) {
+  const g = {conf:0,pend:0,aprov:0,rec:0,outros:0};
+  ev.guests.forEach(x => g[statusGroup(x.status)]++);
   const tabs = [
-    { key:'todos', label:`Todos (${ev.guests.length})` },
-    ...(g.conf   > 0 ? [{ key:'conf',   label:`✓ Confirmados (${g.conf})`   }] : []),
-    ...(g.pend   > 0 ? [{ key:'pend',   label:`★ Convidados (${g.pend})`    }] : []),
-    ...(g.aprov  > 0 ? [{ key:'aprov',  label:`⏳ Aguardando (${g.aprov})`  }] : []),
-    ...(g.rec    > 0 ? [{ key:'rec',    label:`✕ Recusaram (${g.rec})`      }] : []),
-    ...(g.outros > 0 ? [{ key:'outros', label:`— Sem status (${g.outros})`  }] : []),
+    {key:'todos', label:`Todos (${ev.guests.length})`},
+    ...(g.conf   > 0 ? [{key:'conf',   label:`✓ Confirmados (${g.conf})`  }] : []),
+    ...(g.pend   > 0 ? [{key:'pend',   label:`★ Convidados (${g.pend})`   }] : []),
+    ...(g.aprov  > 0 ? [{key:'aprov',  label:`⏳ Aguardando (${g.aprov})` }] : []),
+    ...(g.rec    > 0 ? [{key:'rec',    label:`✕ Recusaram (${g.rec})`     }] : []),
+    ...(g.outros > 0 ? [{key:'outros', label:`— Sem status (${g.outros})` }] : []),
   ];
   document.getElementById('filter-tabs').innerHTML = tabs.map(t =>
-    `<button class="tab ${currentFilter === t.key ? 'active' : ''}" onclick="setFilter('${t.key}')">${t.label}</button>`
+    `<button class="tab ${currentFilter===t.key?'active':''}" onclick="setFilter('${t.key}')">${t.label}</button>`
   ).join('');
-
-  const filtered = currentFilter === 'todos'
-    ? ev.guests
-    : ev.guests.filter(x => STATUS_GROUP(x.status) === currentFilter);
-
+  const filtered = currentFilter==='todos' ? ev.guests : ev.guests.filter(x => statusGroup(x.status)===currentFilter);
   if (!filtered.length) {
     document.getElementById('guest-list').innerHTML = `<div class="empty-state">Nenhum convidado nesta categoria.</div>`;
     return;
   }
-
-  const hasAba = !!ev.aba; // eventos fixos não têm aba
-
   document.getElementById('guest-list').innerHTML = filtered.map(x => {
-    const sc    = STATUS_CLASS(x.status);
     const color = avatarColor(x.nome);
-    const sub   = [x.cargo !== '—' ? x.cargo : null, x.empresa !== '—' ? x.empresa : null].filter(Boolean).join(' · ') || '—';
-    const label = !x.status || x.status === '—' ? 'Sem status' : x.status;
-    const changeBtn = hasAba
-      ? `<button class="change-status-btn" onclick="openStatusModal(event, '${ev.aba}', ${x.rowIndex}, '${x.nome.replace(/'/g,"\\'")}', '${x.status}')">Alterar status</button>`
-      : '';
+    const sub   = [x.cargo!=='—'?x.cargo:null, x.empresa!=='—'?x.empresa:null].filter(Boolean).join(' · ') || '—';
+    const label = (!x.status||x.status==='—') ? 'Sem status' : x.status;
+    const btn   = ev.aba ? `<button class="change-status-btn" onclick="openStatusModal(event,'${ev.aba}',${x.rowIndex},'${x.nome.replace(/'/g,"\\'")}','${x.status}')">Alterar status</button>` : '';
     return `
       <div class="guest-row">
         <div class="guest-avatar" style="background:${color}20;color:${color}">${initials(x.nome)}</div>
-        <div class="guest-info">
-          <div class="guest-name">${x.nome}</div>
-          <div class="guest-sub">${sub}</div>
-        </div>
+        <div class="guest-info"><div class="guest-name">${x.nome}</div><div class="guest-sub">${sub}</div></div>
         <div class="guest-right">
-          <span class="status-tag ${sc}">${label}</span>
-          ${x.resp && x.resp !== '—' ? `<span class="resp-tag">→ ${x.resp}</span>` : ''}
-          ${changeBtn}
+          <span class="status-tag ${statusClass(x.status)}">${label}</span>
+          ${x.resp&&x.resp!=='—' ? `<span class="resp-tag">→ ${x.resp}</span>` : ''}
+          ${btn}
         </div>
       </div>`;
   }).join('');
 }
 
-function setFilter(k) { currentFilter = k; renderGuestList(allEvents[currentEventIdx]); }
-function closeModal() { document.getElementById('overlay').classList.remove('open'); document.body.style.overflow = ''; }
-function handleOverlayClick(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
+function setFilter(k) { currentFilter=k; renderGuests(allEvents[currentIdx]); }
+function closeModal()  { document.getElementById('overlay').classList.remove('open'); document.body.style.overflow=''; }
 
 // ── ADICIONAR CONVIDADO ──────────────────────────────────────
 function openAddGuest() {
-  const ev = allEvents[currentEventIdx];
+  const ev = allEvents[currentIdx];
   document.getElementById('form-evento-nome').textContent = ev.nome + ' · ' + ev.data;
-  ['f-nome','f-cargo','f-empresa','f-obj','f-resp'].forEach(id => document.getElementById(id).value = '');
+  ['f-nome','f-cargo','f-empresa','f-obj','f-resp'].forEach(id => document.getElementById(id).value='');
   document.getElementById('f-status').value = 'Aguardando aprovação';
   document.getElementById('btn-salvar').disabled = false;
-  document.getElementById('saving-indicator').style.display = 'none';
+  document.getElementById('saving-msg').style.display = 'none';
   document.getElementById('form-overlay').classList.add('open');
 }
 function closeAddGuest() { document.getElementById('form-overlay').classList.remove('open'); }
@@ -533,104 +492,65 @@ function closeAddGuest() { document.getElementById('form-overlay').classList.rem
 async function saveGuest() {
   const nome = document.getElementById('f-nome').value.trim();
   if (!nome) { alert('Nome é obrigatório!'); return; }
-
-  const ev = allEvents[currentEventIdx];
-  if (!ev.aba) { alert('Este evento não está vinculado à planilha.'); return; }
-
+  const ev = allEvents[currentIdx];
   document.getElementById('btn-salvar').disabled = true;
-  document.getElementById('saving-indicator').style.display = 'block';
-
-  const body = {
-    action: 'addGuest',
-    aba:     ev.aba,
-    nome,
-    cargo:   document.getElementById('f-cargo').value.trim(),
-    empresa: document.getElementById('f-empresa').value.trim(),
-    status:  document.getElementById('f-status').value,
-    obj:     document.getElementById('f-obj').value.trim(),
-    resp:    document.getElementById('f-resp').value.trim(),
-  };
-
+  document.getElementById('saving-msg').style.display = 'block';
   try {
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify(body),
-    });
+    const res  = await fetch(API, { method:'POST', body: JSON.stringify({
+      action:'addGuest', aba:ev.aba, nome,
+      cargo:   document.getElementById('f-cargo').value.trim(),
+      empresa: document.getElementById('f-empresa').value.trim(),
+      status:  document.getElementById('f-status').value,
+      obj:     document.getElementById('f-obj').value.trim(),
+      resp:    document.getElementById('f-resp').value.trim(),
+    })});
     const data = await res.json();
     if (!data.ok) throw new Error(data.error);
-
     closeAddGuest();
-    await loadDashboard(); // recarrega tudo
-    openModal(currentEventIdx); // reabre o modal atualizado
-  } catch (err) {
+    await loadDashboard();
+    openModal(currentIdx);
+  } catch(err) {
     alert('Erro ao salvar: ' + err.message);
     document.getElementById('btn-salvar').disabled = false;
-    document.getElementById('saving-indicator').style.display = 'none';
+    document.getElementById('saving-msg').style.display = 'none';
   }
 }
 
 // ── ALTERAR STATUS ───────────────────────────────────────────
 function openStatusModal(e, aba, rowIndex, nome, statusAtual) {
   e.stopPropagation();
-  statusEditTarget = { aba, rowIndex, nome, statusAtual };
+  statusTarget = { aba, rowIndex };
   document.getElementById('status-guest-label').textContent = nome;
-
-  document.querySelectorAll('.status-opt').forEach(btn => {
-    btn.classList.toggle('selected', btn.textContent.includes(statusAtual));
-  });
-
-  document.getElementById('status-saving').style.display = 'none';
+  document.querySelectorAll('.status-opt').forEach(b => b.classList.toggle('selected', b.textContent.includes(statusAtual)));
+  document.getElementById('status-saving-msg').style.display = 'none';
   document.getElementById('status-overlay').classList.add('open');
 }
 function closeStatusModal() { document.getElementById('status-overlay').classList.remove('open'); }
 
 async function selectStatus(novoStatus) {
-  if (!statusEditTarget) return;
-
-  document.querySelectorAll('.status-opt').forEach(btn => {
-    btn.classList.toggle('selected', btn.textContent.includes(novoStatus));
-    btn.disabled = true;
-  });
-
-  const saving = document.getElementById('status-saving');
-  saving.style.display = 'block';
-  saving.textContent = 'Salvando...';
-
+  document.querySelectorAll('.status-opt').forEach(b => { b.classList.toggle('selected', b.textContent.includes(novoStatus)); b.disabled=true; });
+  const msg = document.getElementById('status-saving-msg');
+  msg.style.display='block'; msg.textContent='Salvando...';
   try {
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify({
-        action:     'updateStatus',
-        aba:        statusEditTarget.aba,
-        rowIndex:   statusEditTarget.rowIndex,
-        novoStatus,
-      }),
-    });
+    const res  = await fetch(API, { method:'POST', body: JSON.stringify({ action:'updateStatus', ...statusTarget, novoStatus }) });
     const data = await res.json();
     if (!data.ok) throw new Error(data.error);
-
-    saving.textContent = '✅ Salvo!';
-    setTimeout(async () => {
-      closeStatusModal();
-      await loadDashboard();
-      openModal(currentEventIdx);
-    }, 800);
-  } catch (err) {
-    saving.textContent = '⚠️ Erro: ' + err.message;
-    document.querySelectorAll('.status-opt').forEach(btn => btn.disabled = false);
+    msg.textContent = '✅ Salvo!';
+    setTimeout(async () => { closeStatusModal(); await loadDashboard(); openModal(currentIdx); }, 800);
+  } catch(err) {
+    msg.textContent = '⚠️ Erro: ' + err.message;
+    document.querySelectorAll('.status-opt').forEach(b => b.disabled=false);
   }
 }
 
-// ── TECLADO ──────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
+  if (e.key==='Escape') {
     if (document.getElementById('status-overlay').classList.contains('open')) closeStatusModal();
     else if (document.getElementById('form-overlay').classList.contains('open')) closeAddGuest();
     else closeModal();
   }
 });
 
-// ── INIT ─────────────────────────────────────────────────────
 loadDashboard();
 </script>
 </body>
