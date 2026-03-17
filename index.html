@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Eventos 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
   :root {
     --bg:#0a0a0f; --surface:#13131c; --surface2:#1a1a26;
     --border:#1e1e2e; --border2:#2a2a3e;
     --green:#00e5a0; --yellow:#f5c542; --orange:#ff8c42;
-    --red:#ff4d6d; --blue:#4da6ff; --purple:#b06dff; --muted:#555570;
+    --red:#ff4d6d; --blue:#4da6ff; --muted:#555570;
     --text:#e8e8f0; --text-dim:#9090aa;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -37,17 +37,18 @@
   .refresh-btn:hover { border-color:var(--green); color:var(--green); }
   .refresh-btn.spinning svg { animation:spin .8s linear infinite; }
 
-  /* VIEW TABS */
-  .view-tabs { display:flex; gap:4px; margin-bottom:24px; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:4px; width:fit-content; }
-  .view-tab { padding:8px 22px; border-radius:10px; font-size:13px; font-weight:600; cursor:pointer; border:none; background:transparent; color:var(--text-dim); transition:all .2s; letter-spacing:.5px; }
-  .view-tab.active { background:var(--surface2); color:#fff; border:1px solid var(--border2); }
-  .view-tab:hover:not(.active) { color:var(--text); }
+  /* NAV TABS (Dashboard / Analytics) */
+  .nav-tabs { display:flex; gap:4px; margin-bottom:24px; }
+  .nav-tab { padding:9px 22px; border-radius:10px; font-size:14px; font-weight:500; cursor:pointer; border:1px solid var(--border); background:transparent; color:var(--text-dim); transition:all .15s; }
+  .nav-tab:hover { color:var(--text); border-color:var(--border2); }
+  .nav-tab.active { background:rgba(255,255,255,.07); border-color:#3a3a55; color:#fff; }
 
   /* MONTH FILTER */
-  .month-filter { display:flex; gap:6px; margin-bottom:20px; flex-wrap:wrap; }
-  .month-btn { padding:6px 16px; border-radius:20px; font-size:12px; font-weight:600; cursor:pointer; border:1px solid var(--border); background:transparent; color:var(--text-dim); transition:all .15s; text-transform:uppercase; letter-spacing:1px; }
-  .month-btn:hover { border-color:var(--border2); color:var(--text); }
-  .month-btn.active { background:rgba(77,166,255,.12); border-color:var(--blue); color:var(--blue); }
+  .month-filter { display:flex; gap:6px; margin-bottom:20px; flex-wrap:wrap; align-items:center; }
+  .month-filter span { font-size:12px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; margin-right:6px; }
+  .mfbtn { padding:6px 16px; border-radius:20px; font-size:13px; font-weight:500; cursor:pointer; border:1px solid var(--border); background:transparent; color:var(--text-dim); transition:all .15s; }
+  .mfbtn:hover { border-color:var(--border2); color:var(--text); }
+  .mfbtn.active { background:rgba(77,166,255,.12); border-color:var(--blue); color:var(--blue); }
 
   /* LEGENDA */
   .legend { display:flex; gap:20px; margin-bottom:24px; flex-wrap:wrap; }
@@ -77,7 +78,6 @@
   .chip-muted { background:rgba(255,255,255,.05); color:var(--text-dim); } .chip-muted .dot { background:var(--muted); }
   .no-data { font-size:12px; color:var(--muted); font-style:italic; padding:4px 0; }
   .click-hint { font-size:11px; color:var(--muted); margin-top:12px; text-align:right; }
-  .empty-month { text-align:center; padding:60px 20px; color:var(--muted); font-size:14px; grid-column:1/-1; }
 
   /* MODAL CONVIDADOS */
   .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); backdrop-filter:blur(6px); z-index:100; align-items:center; justify-content:center; padding:24px; }
@@ -152,22 +152,13 @@
   .status-opt.selected { border-color:var(--green); background:rgba(0,229,160,.08); color:var(--green); }
 
   /* ANALYTICS */
-  #view-analytics { padding-top:4px; }
-  .analytics-loading { text-align:center; padding:60px; color:var(--text-dim); font-size:14px; }
-  .analytics-grid { display:grid; gap:20px; }
+  #analytics-view { display:none; }
+  .analytics-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(480px,1fr)); gap:20px; margin-top:4px; }
   .chart-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:24px; }
-  .chart-card h3 { font-size:13px; font-weight:600; color:var(--text-dim); text-transform:uppercase; letter-spacing:2px; margin-bottom:20px; }
-  .chart-card.wide { grid-column: 1 / -1; }
-  .charts-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
-  @media (max-width:700px) { .charts-row { grid-template-columns:1fr; } }
-  .chart-wrap { position:relative; height:260px; }
-  .chart-wrap-tall { position:relative; height:320px; }
-  .analytics-empty { text-align:center; padding:60px; color:var(--muted); font-size:14px; }
-  .kpi-row { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px; }
-  .kpi { background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:14px 20px; flex:1; min-width:120px; }
-  .kpi .kv { font-family:'Bebas Neue',sans-serif; font-size:32px; line-height:1; }
-  .kpi .kl { font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:1.5px; margin-top:4px; }
-  .kpi.g .kv { color:var(--green); } .kpi.b .kv { color:var(--blue); } .kpi.y .kv { color:var(--yellow); } .kpi.p .kv { color:var(--purple); }
+  .chart-card h3 { font-size:14px; font-weight:600; color:var(--text-dim); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:20px; }
+  .chart-card canvas { max-height:260px; }
+  .chart-card.full { grid-column:1/-1; }
+  .analytics-loading { text-align:center; padding:60px; color:var(--text-dim); font-size:14px; }
 </style>
 </head>
 <body>
@@ -196,15 +187,24 @@
   </div>
 </div>
 
-<!-- VIEW TABS -->
-<div class="view-tabs">
-  <button class="view-tab active" data-view="eventos" onclick="switchView('eventos')">Eventos</button>
-  <button class="view-tab" data-view="analytics" onclick="switchView('analytics')">Analytics</button>
+<!-- NAV TABS -->
+<div class="nav-tabs">
+  <button class="nav-tab active" id="tab-dashboard" onclick="showView('dashboard')">Dashboard</button>
+  <button class="nav-tab" id="tab-analytics" onclick="showView('analytics')">Analytics</button>
 </div>
 
-<!-- ── EVENTOS VIEW ─────────────────────────────────────── -->
-<div id="view-eventos">
-  <div class="month-filter" id="month-filter"></div>
+<!-- DASHBOARD VIEW -->
+<div id="dashboard-view">
+  <!-- MONTH FILTER -->
+  <div class="month-filter">
+    <span>Mês:</span>
+    <button class="mfbtn" onclick="setMonth(1)"  id="mf-1">Jan</button>
+    <button class="mfbtn" onclick="setMonth(2)"  id="mf-2">Fev</button>
+    <button class="mfbtn" onclick="setMonth(3)"  id="mf-3">Mar</button>
+    <button class="mfbtn" onclick="setMonth(4)"  id="mf-4">Abr</button>
+    <button class="mfbtn" onclick="setMonth(0)"  id="mf-0">Todos</button>
+  </div>
+
   <div class="legend">
     <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Confirmado / Cadastrado</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--yellow)"></div>Convidado / Aprovado</div>
@@ -212,15 +212,35 @@
     <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Negado / Recusou</div>
     <div class="legend-item"><div class="legend-dot" style="background:var(--muted)"></div>Vaga livre</div>
   </div>
+
   <div class="grid" id="cards"></div>
 </div>
 
-<!-- ── ANALYTICS VIEW ──────────────────────────────────── -->
-<div id="view-analytics" style="display:none">
+<!-- ANALYTICS VIEW -->
+<div id="analytics-view">
   <div id="analytics-content">
-    <div class="analytics-loading">
-      <div class="spinner" style="margin:0 auto 12px"></div>
-      Carregando dados de analytics...
+    <div class="analytics-loading" id="analytics-loading">Carregando analytics...</div>
+    <div class="analytics-grid" id="analytics-grid" style="display:none">
+      <div class="chart-card">
+        <h3>Ocupação por evento</h3>
+        <canvas id="chart-ocupacao"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Taxa de confirmação por tipo</h3>
+        <canvas id="chart-tipo"></canvas>
+      </div>
+      <div class="chart-card full">
+        <h3>Evolução mensal de confirmações</h3>
+        <canvas id="chart-mensal"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Ranking de responsáveis</h3>
+        <canvas id="chart-resp"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Distribuição de objetivos</h3>
+        <canvas id="chart-obj"></canvas>
+      </div>
     </div>
   </div>
 </div>
@@ -322,32 +342,60 @@ const API = 'https://script.google.com/macros/s/AKfycbx5Kp6Mj6xPYbaVhMKI7lloVtsX
 
 // Datas de exibição por nome do evento
 const DATAS = {
-  // Março
-  'Fortaleza x Ceará':          '01/03',
-  'Show Luan Santana':          '14/03',
-  'Palmeiras x Mirassol':       '15/03',
-  'Santos X Corinthians (Março)': '15/03',
-  'Experiência Cariani':        '17/03',
-  'Palmeiras x Botafogo':       '18/03',
-  'Santos X Internacional':     '18/03',
-  'Confraria CEO':              '26/03',
-  'Gilberto Gil':               '28/03',
-  'Fortaleza x Cuiabá':         '31/03',
-  // Abril (datas a confirmar – atualize com o dia quando souber)
-  'Fortaleza x Imperatriz':     '—/04',
-  'Festival Monsters of Rock':  '—/04',
-  'Experiência Cariani 2':      '—/04',
-  'Tecla Experience':           '—/04',
-  'Tecla Talks ABR FOR':        '—/04',
-  'Show Dominguinho':           '—/04',
-  'Van Cariani':                '—/04',
-  'GGTIC':                      '—/04',
+  'Santos X Novo Horizontino': '10/01',
+  'Tour Pacaembu':             '18/01',
+  'Santos X Corinthians (Jan)':'22/01',
+  'Bora Varejo pós-NRF':       '22/01',
+  'Santos X São Paulo':        '04/02',
+  'Santos X Velo Clube':       '15/02',
+  'Santos X Vasco':            '26/02',
+  'Fortaleza x Ceará':         '01/03',
+  'Show Luan Santana':         '14/03',
+  'Palmeiras x Mirassol':      '15/03',
+  'Santos X Corinthians (Março)':'15/03',
+  'Experiência Cariani':       '17/03',
+  'Palmeiras x Botafogo':      '18/03',
+  'Santos X Internacional':    '18/03',
+  'Confraria CEO':             '26/03',
+  'Gilberto Gil':              '28/03',
+  'Fortaleza x Imperatriz':    '28/03',
+  'Fortaleza x Cuiabá':        '31/03',
+  'Palmeiras x Grêmio':        '01/04',
+  'Santos X Remo':             '01/04',
+  'Fortaleza x Juventude':     '04/04',
+  'Festival Monsters of Rock': '04/04',
+  'Experiência Cariani 2':     '09/04',
+  'GGTIC':                     '11/04',
+  'Santos X Atlético MG':      '12/04',
+  'Tecla Experience':          '15/04',
+  'Fortaleza x Criciúma':      '19/04',
+  'Palmeiras x Athletico PR':  '19/04',
+  'Santos X Fluminense':       '19/04',
+  'Show Dominguinho':          '25/04',
+  'Tecla Talks ABR FOR':       '28/04',
 };
 
-const MNAMES = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+// Eventos fixos sem aba (externos / sem inscrição)
+const FIXOS = [
+  { nome:'Confraria CEO',          vagas:8,   conf:0, pend:0, aprov:0, rec:0, guests:[], mes:3,
+    bloqueado:true, bloqueadoMsg:'🔒 Externo', bloqueadoDesc:'Convites não são feitos pela Tecla' },
+  { nome:'Festival Monsters of Rock', vagas:0, conf:0, pend:0, aprov:0, rec:0, guests:[], mes:4,
+    bloqueado:true, bloqueadoMsg:'⏳ Em breve', bloqueadoDesc:'Inscrições em breve' },
+  { nome:'Experiência Cariani 2',  vagas:10, conf:0, pend:0, aprov:0, rec:0, guests:[], mes:4,
+    bloqueado:true, bloqueadoMsg:'⏳ Em breve', bloqueadoDesc:'Inscrições em breve' },
+  { nome:'GGTIC',                  vagas:150, conf:0, pend:0, aprov:0, rec:0, guests:[], mes:4,
+    bloqueado:true, bloqueadoMsg:'🔒 Externo', bloqueadoDesc:'Convites não são feitos pela Tecla' },
+  { nome:'Tecla Experience',       vagas:0,  conf:0, pend:0, aprov:0, rec:0, guests:[], mes:4,
+    bloqueado:true, bloqueadoMsg:'⏳ Em breve', bloqueadoDesc:'Inscrições em breve' },
+  { nome:'Show Dominguinho',       vagas:9,  conf:0, pend:0, aprov:0, rec:0, guests:[], mes:4,
+    bloqueado:true, bloqueadoMsg:'⏳ Em breve', bloqueadoDesc:'Inscrições em breve' },
+  { nome:'Tecla Talks ABR FOR',    vagas:30, conf:0, pend:0, aprov:0, rec:0, guests:[], mes:4,
+    bloqueado:true, bloqueadoMsg:'⏳ Em breve', bloqueadoDesc:'Inscrições em breve' },
+];
+
 const ACOLORS = ['#1a6b4a','#4a3a6b','#6b3a3a','#3a4a6b','#6b5a1a','#1a4a6b','#6b3a5a','#3a6b3a'];
 const avatarColor = n => ACOLORS[(n.charCodeAt(0) + (n.charCodeAt(1)||0)) % ACOLORS.length];
-const initials    = n => n.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
+const initials = n => n.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
 
 const statusClass = s => {
   if (!s || s==='—') return 's-none';
@@ -368,33 +416,29 @@ const statusGroup = s => {
   return 'outros';
 };
 
-// Extrai mês numérico do string de data "dd/mm" ou "—/mm"
-function getMes(data) {
-  const parts = (data || '').split('/');
-  return parts.length > 1 ? (parseInt(parts[1]) || 0) : 0;
-}
-
-let allEvents = [];
-let currentEvent = null;
-let currentFilter = 'todos';
-let statusTarget  = null;
-let selectedMonth = new Date().getMonth() + 1; // mês atual como padrão
-let currentView   = 'eventos';
+let allEvents = [], currentIdx = null, currentFilter = 'todos', statusTarget = null;
+let currentMonth = new Date().getMonth() + 1; // mês atual como padrão
 let analyticsLoaded = false;
-let analyticsCharts = [];
+let chartInstances = {};
 
-// ── VIEW ──────────────────────────────────────────────────────
-function switchView(view) {
-  currentView = view;
-  document.getElementById('view-eventos').style.display   = view === 'eventos'   ? '' : 'none';
-  document.getElementById('view-analytics').style.display = view === 'analytics' ? '' : 'none';
-  document.querySelectorAll('.view-tab').forEach(t =>
-    t.classList.toggle('active', t.dataset.view === view)
-  );
-  if (view === 'analytics' && !analyticsLoaded) loadAnalytics();
+// ── VIEW CONTROL ─────────────────────────────────────────────
+function showView(v) {
+  document.getElementById('dashboard-view').style.display = v==='dashboard' ? '' : 'none';
+  document.getElementById('analytics-view').style.display  = v==='analytics'  ? '' : 'none';
+  document.getElementById('tab-dashboard').classList.toggle('active', v==='dashboard');
+  document.getElementById('tab-analytics').classList.toggle('active', v==='analytics');
+  if (v==='analytics' && !analyticsLoaded) loadAnalytics();
 }
 
-// ── CARREGAR DASHBOARD ────────────────────────────────────────
+// ── MÊS FILTER ───────────────────────────────────────────────
+function setMonth(m) {
+  currentMonth = m;
+  document.querySelectorAll('.mfbtn').forEach(b => b.classList.remove('active'));
+  document.getElementById('mf-' + m).classList.add('active');
+  render();
+}
+
+// ── CARREGAR ─────────────────────────────────────────────────
 async function loadDashboard() {
   const btn = document.querySelector('.refresh-btn');
   btn.classList.add('spinning');
@@ -403,14 +447,21 @@ async function loadDashboard() {
     const res  = await fetch(API + '?action=getDashboard');
     const data = await res.json();
     if (!data.ok) throw new Error(data.error);
-
-    allEvents = data.eventos.map(ev => ({
-      ...ev,
-      data: DATAS[ev.nome] || (ev.mes ? `—/${String(ev.mes).padStart(2,'0')}` : '—')
-    }));
-
-    renderMonthFilter();
-    render();
+    allEvents = [
+      ...data.eventos.map(ev => ({
+        ...ev,
+        data: DATAS[ev.nome] || '—',
+        mes:  ev.mes || Number((DATAS[ev.nome]||'01/01').split('/')[1])
+      })),
+      ...FIXOS.map(ev => ({ ...ev, data: DATAS[ev.nome] || '—' }))
+    ];
+    // sort by date
+    allEvents.sort((a,b) => {
+      const [da,ma] = (a.data||'01/01').split('/').map(Number);
+      const [db,mb] = (b.data||'01/01').split('/').map(Number);
+      return (ma*100+da) - (mb*100+db);
+    });
+    setMonth(currentMonth);
     document.getElementById('loading').style.display = 'none';
   } catch(err) {
     document.getElementById('loading').style.display = 'none';
@@ -422,113 +473,74 @@ async function loadDashboard() {
   }
 }
 
-// ── FILTRO DE MÊS ─────────────────────────────────────────────
-function renderMonthFilter() {
-  const meses = [...new Set(allEvents.map(ev => getMes(ev.data)).filter(m => m > 0))].sort((a,b)=>a-b);
-  // Garante que o mês atual existe como opção
-  if (!meses.includes(selectedMonth) && meses.length > 0) selectedMonth = meses[0];
-  document.getElementById('month-filter').innerHTML = meses.map(m =>
-    `<button class="month-btn ${selectedMonth===m?'active':''}" onclick="filterMonth(${m})">${MNAMES[m-1]}</button>`
-  ).join('');
-}
-
-function filterMonth(m) {
-  selectedMonth = m;
-  renderMonthFilter();
-  render();
-}
-
-// ── RENDERIZAR CARDS ──────────────────────────────────────────
+// ── RENDERIZAR CARDS ─────────────────────────────────────────
 function render() {
   const container = document.getElementById('cards');
   container.innerHTML = '';
-
+  let tConf=0, tPend=0, tLivres=0, tEventos=0;
   const today = new Date(); today.setHours(0,0,0,0);
 
-  // Filtra por mês selecionado
-  const filtered = allEvents.filter(ev => getMes(ev.data) === selectedMonth);
+  const filtered = currentMonth === 0
+    ? allEvents
+    : allEvents.filter(ev => {
+        const [, m] = (ev.data||'01/01').split('/').map(Number);
+        return m === currentMonth;
+      });
 
-  // Ordena por dia dentro do mês
-  filtered.sort((a, b) => {
-    const da = parseInt(a.data) || 99;
-    const db = parseInt(b.data) || 99;
-    return da - db;
-  });
+  filtered.forEach((ev, idx) => {
+    const globalIdx = allEvents.indexOf(ev);
+    const [d,m] = (ev.data||'01/01').split('/').map(Number);
+    const evDate = new Date(2026, m-1, d);
+    const passado = evDate < today;
 
-  if (filtered.length === 0) {
-    container.innerHTML = `<div class="empty-month">Nenhum evento em ${MNAMES[selectedMonth-1]}.</div>`;
-    updatePills(allEvents.filter(ev => getMes(ev.data) === selectedMonth));
-    return;
-  }
+    if (!ev.bloqueado) {
+      tConf   += ev.conf||0;
+      tPend   += ev.pend||0;
+      tLivres += Math.max(0,(ev.vagas||0)-(ev.conf||0)-(ev.pend||0)-(ev.aprov||0));
+      tEventos++;
+    }
 
-  let tConf=0, tPend=0, tLivres=0, tEventos=0;
+    const nomeMes = ['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+    const dataLabel = ev.data !== '—' ? ev.data + ' · ' + nomeMes[m] : '—';
 
-  filtered.forEach(ev => {
-    // Determinar se evento passou
-    const [ddStr, mmStr] = (ev.data || '—/01').split('/');
-    const dd = parseInt(ddStr);
-    const mm = parseInt(mmStr) || 1;
-    const hasDay = !isNaN(dd) && dd > 0;
-    const evDate = hasDay ? new Date(2026, mm-1, dd) : null;
-    const passado = hasDay && evDate < today;
-
-    tConf   += ev.conf  || 0;
-    tPend   += ev.pend  || 0;
-    tLivres += Math.max(0,(ev.vagas||0)-(ev.conf||0)-(ev.pend||0)-(ev.aprov||0));
-    if (!ev.bloqueado) tEventos++;
-
-    // Card: ENCERRADO
     if (passado && !ev.bloqueado) {
       container.innerHTML += `
         <div class="card" style="opacity:.45;cursor:default;border-color:#1e1e2e;">
-          <div class="card-top">
-            <span class="card-date">${ev.data}</span>
-            <span class="vagas-badge" style="background:rgba(255,255,255,.05);color:var(--muted)">✓ Encerrado</span>
-          </div>
+          <div class="card-top"><span class="card-date">${dataLabel}</span><span class="vagas-badge" style="background:rgba(255,255,255,.05);color:var(--muted)">✓ Encerrado</span></div>
           <h2 style="color:#666">${ev.nome}</h2>
           <p class="no-data" style="margin-top:8px">Evento já realizado</p>
         </div>`;
       return;
     }
-
-    // Card: BLOQUEADO (Externo ou Em breve)
     if (ev.bloqueado) {
       container.innerHTML += `
-        <div class="card" style="opacity:.55;cursor:default;">
-          <div class="card-top">
-            <span class="card-date">${ev.data}</span>
-            <span class="vagas-badge" style="background:rgba(255,255,255,.06);color:var(--muted)">${ev.bloqueadoMsg}</span>
-          </div>
+        <div class="card" style="opacity:.6;cursor:default;">
+          <div class="card-top"><span class="card-date">${dataLabel}</span><span class="vagas-badge" style="background:rgba(255,255,255,.06);color:var(--muted)">${ev.bloqueadoMsg}</span></div>
           <h2>${ev.nome}</h2>
           <p class="no-data" style="margin-top:8px">${ev.bloqueadoDesc}</p>
         </div>`;
       return;
     }
 
-    // Card: NORMAL
     const livres = Math.max(0, ev.vagas - ev.conf - ev.pend - ev.aprov);
     const pC = Math.min((ev.conf/ev.vagas)*100,100);
     const pP = Math.min((ev.pend/ev.vagas)*100,100-pC);
     const pA = Math.min((ev.aprov/ev.vagas)*100,100-pC-pP);
     const pR = Math.min((ev.rec/ev.vagas)*100,100-pC-pP-pA);
     const estado = ev.conf+ev.pend+ev.aprov >= ev.vagas ? 'lotado' : ev.conf+ev.pend+ev.aprov > 0 ? 'quase' : 'vazio';
-    const badge  = livres > 0
-      ? `<span class="vagas-badge badge-livre">${livres} vaga${livres>1?'s':''} livre${livres>1?'s':''}</span>`
-      : `<span class="vagas-badge badge-cheio">Lotado</span>`;
+    const badge  = livres > 0 ? `<span class="vagas-badge badge-livre">${livres} vaga${livres>1?'s':''} livre${livres>1?'s':''}</span>` : `<span class="vagas-badge badge-cheio">Lotado</span>`;
     const semDados = ev.conf===0 && ev.pend===0 && ev.aprov===0 && ev.rec===0;
-    const chips = semDados
-      ? `<p class="no-data">Nenhum convidado cadastrado ainda</p>`
-      : `<div class="stats-row">
-          ${ev.conf  > 0 ? `<div class="stat-chip chip-green"><span class="dot"></span>${ev.conf} confirmado${ev.conf>1?'s':''}</div>` : ''}
-          ${ev.pend  > 0 ? `<div class="stat-chip chip-yellow"><span class="dot"></span>${ev.pend} convidado${ev.pend>1?'s':''}</div>` : ''}
-          ${ev.aprov > 0 ? `<div class="stat-chip chip-orange"><span class="dot"></span>${ev.aprov} aguardando</div>` : ''}
-          ${ev.rec   > 0 ? `<div class="stat-chip chip-red"><span class="dot"></span>${ev.rec} recusou</div>` : ''}
-          ${livres   > 0 ? `<div class="stat-chip chip-muted"><span class="dot"></span>${livres} livre${livres>1?'s':''}</div>` : ''}
-        </div>`;
+    const chips = semDados ? `<p class="no-data">Nenhum convidado cadastrado ainda</p>` : `<div class="stats-row">
+      ${ev.conf  > 0 ? `<div class="stat-chip chip-green"><span class="dot"></span>${ev.conf} confirmado${ev.conf>1?'s':''}</div>` : ''}
+      ${ev.pend  > 0 ? `<div class="stat-chip chip-yellow"><span class="dot"></span>${ev.pend} convidado${ev.pend>1?'s':''}</div>` : ''}
+      ${ev.aprov > 0 ? `<div class="stat-chip chip-orange"><span class="dot"></span>${ev.aprov} aguardando</div>` : ''}
+      ${ev.rec   > 0 ? `<div class="stat-chip chip-red"><span class="dot"></span>${ev.rec} recusou</div>` : ''}
+      ${livres   > 0 ? `<div class="stat-chip chip-muted"><span class="dot"></span>${livres} livre${livres>1?'s':''}</div>` : ''}
+    </div>`;
 
     container.innerHTML += `
-      <div class="card ${estado}" onclick="openModal('${ev.nome.replace(/'/g,"\\'")}')">
-        <div class="card-top"><span class="card-date">${ev.data}</span>${badge}</div>
+      <div class="card ${estado}" onclick="openModal(${globalIdx})">
+        <div class="card-top"><span class="card-date">${dataLabel}</span>${badge}</div>
         <h2>${ev.nome}</h2>
         <div>
           <div class="progress-bar">
@@ -549,28 +561,12 @@ function render() {
   document.getElementById('total-livres').textContent  = tLivres;
 }
 
-function updatePills(evs) {
-  let tConf=0, tPend=0, tLivres=0, tEventos=0;
-  evs.forEach(ev => {
-    tConf   += ev.conf  || 0;
-    tPend   += ev.pend  || 0;
-    tLivres += Math.max(0,(ev.vagas||0)-(ev.conf||0)-(ev.pend||0)-(ev.aprov||0));
-    if (!ev.bloqueado) tEventos++;
-  });
-  document.getElementById('total-eventos').textContent = tEventos;
-  document.getElementById('total-conf').textContent    = tConf;
-  document.getElementById('total-pend').textContent    = tPend;
-  document.getElementById('total-livres').textContent  = tLivres;
-}
-
-// ── MODAL CONVIDADOS ──────────────────────────────────────────
-function openModal(evNome) {
-  currentEvent = allEvents.find(e => e.nome === evNome);
-  if (!currentEvent) return;
-  const ev = currentEvent;
+// ── MODAL CONVIDADOS ─────────────────────────────────────────
+function openModal(idx) {
+  currentIdx = idx;
+  const ev = allEvents[idx];
   const livres = Math.max(0, ev.vagas - ev.conf - ev.pend - ev.aprov);
-  const monthName = MNAMES[(getMes(ev.data)||1)-1];
-  document.getElementById('modal-date').textContent  = ev.data + ' · ' + monthName + ' 2026';
+  document.getElementById('modal-date').textContent  = ev.data + ' · 2026';
   document.getElementById('modal-title').textContent = ev.nome;
   document.getElementById('modal-stats').innerHTML = `
     <div class="mstat"><span class="mv" style="color:var(--text)">${ev.vagas}</span><span class="ml">Total vagas</span></div>
@@ -615,9 +611,7 @@ function renderGuests(ev) {
     const color = avatarColor(x.nome);
     const sub   = [x.cargo!=='—'?x.cargo:null, x.empresa!=='—'?x.empresa:null].filter(Boolean).join(' · ') || '—';
     const label = (!x.status||x.status==='—') ? 'Sem status' : x.status;
-    const btn   = ev.aba
-      ? `<button class="change-status-btn" onclick="openStatusModal(event,'${ev.aba}',${x.rowIndex},'${x.nome.replace(/'/g,"\\'")}','${x.status}')">Alterar status</button>`
-      : '';
+    const btn   = ev.aba ? `<button class="change-status-btn" onclick="openStatusModal(event,'${ev.aba}',${x.rowIndex},'${x.nome.replace(/'/g,"\\'")}','${x.status}')">Alterar status</button>` : '';
     return `
       <div class="guest-row">
         <div class="guest-avatar" style="background:${color}20;color:${color}">${initials(x.nome)}</div>
@@ -631,12 +625,12 @@ function renderGuests(ev) {
   }).join('');
 }
 
-function setFilter(k) { currentFilter=k; renderGuests(currentEvent); }
+function setFilter(k) { currentFilter=k; renderGuests(allEvents[currentIdx]); }
 function closeModal()  { document.getElementById('overlay').classList.remove('open'); document.body.style.overflow=''; }
 
-// ── ADICIONAR CONVIDADO ───────────────────────────────────────
+// ── ADICIONAR CONVIDADO ──────────────────────────────────────
 function openAddGuest() {
-  const ev = currentEvent;
+  const ev = allEvents[currentIdx];
   document.getElementById('form-evento-nome').textContent = ev.nome + ' · ' + ev.data;
   ['f-nome','f-cargo','f-empresa','f-obj','f-resp'].forEach(id => document.getElementById(id).value='');
   document.getElementById('f-status').value = 'Aguardando aprovação';
@@ -649,7 +643,7 @@ function closeAddGuest() { document.getElementById('form-overlay').classList.rem
 async function saveGuest() {
   const nome = document.getElementById('f-nome').value.trim();
   if (!nome) { alert('Nome é obrigatório!'); return; }
-  const ev = currentEvent;
+  const ev = allEvents[currentIdx];
   document.getElementById('btn-salvar').disabled = true;
   document.getElementById('saving-msg').style.display = 'block';
   try {
@@ -664,9 +658,9 @@ async function saveGuest() {
     const data = await res.json();
     if (!data.ok) throw new Error(data.error);
     closeAddGuest();
-    const savedNome = ev.nome;
+    analyticsLoaded = false;
     await loadDashboard();
-    openModal(savedNome);
+    openModal(currentIdx);
   } catch(err) {
     alert('Erro ao salvar: ' + err.message);
     document.getElementById('btn-salvar').disabled = false;
@@ -674,7 +668,7 @@ async function saveGuest() {
   }
 }
 
-// ── ALTERAR STATUS ────────────────────────────────────────────
+// ── ALTERAR STATUS ───────────────────────────────────────────
 function openStatusModal(e, aba, rowIndex, nome, statusAtual) {
   e.stopPropagation();
   statusTarget = { aba, rowIndex };
@@ -697,224 +691,145 @@ async function selectStatus(novoStatus) {
     const data = await res.json();
     if (!data.ok) throw new Error(data.error);
     msg.textContent = '✅ Salvo!';
-    const savedNome = currentEvent.nome;
-    setTimeout(async () => { closeStatusModal(); await loadDashboard(); openModal(savedNome); }, 800);
+    analyticsLoaded = false;
+    setTimeout(async () => { closeStatusModal(); await loadDashboard(); openModal(currentIdx); }, 800);
   } catch(err) {
     msg.textContent = '⚠️ Erro: ' + err.message;
     document.querySelectorAll('.status-opt').forEach(b => b.disabled=false);
   }
 }
 
-// ── ANALYTICS ─────────────────────────────────────────────────
+// ── ANALYTICS ────────────────────────────────────────────────
 async function loadAnalytics() {
+  document.getElementById('analytics-loading').style.display = 'block';
+  document.getElementById('analytics-grid').style.display = 'none';
   try {
     const res  = await fetch(API + '?action=getAnalytics');
     const data = await res.json();
-    if (!data.ok) throw new Error(data.error || 'Erro desconhecido');
-    renderAnalytics(data.analytics);
+    if (!data.ok) throw new Error(data.error);
     analyticsLoaded = true;
+    buildCharts(data);
+    document.getElementById('analytics-loading').style.display = 'none';
+    document.getElementById('analytics-grid').style.display = '';
   } catch(err) {
-    document.getElementById('analytics-content').innerHTML =
-      `<div class="analytics-empty">⚠️ Erro ao carregar analytics: ${err.message}</div>`;
+    document.getElementById('analytics-loading').textContent = '⚠️ Erro ao carregar analytics: ' + err.message;
   }
 }
 
-function renderAnalytics(a) {
-  // Destruir charts anteriores se existirem
-  analyticsCharts.forEach(c => c.destroy());
-  analyticsCharts = [];
+function destroyChart(id) {
+  if (chartInstances[id]) { chartInstances[id].destroy(); delete chartInstances[id]; }
+}
 
-  const eventos     = a.eventos     || [];
-  const porTipo     = a.porTipo     || {};
-  const porMes      = a.porMes      || [];
-  const responsaveis= a.responsaveis|| [];
-  const objetivos   = a.objetivos   || [];
+function buildCharts(data) {
+  const co = { color:'rgba(255,255,255,.6)', grid:'rgba(255,255,255,.05)' };
 
-  if (!eventos.length) {
-    document.getElementById('analytics-content').innerHTML =
-      `<div class="analytics-empty">Nenhum dado disponível ainda. Os gráficos aparecerão quando houver eventos finalizados.</div>`;
-    return;
-  }
-
-  // KPIs gerais
-  const totalVagas = eventos.reduce((s,e)=>s+(e.vagas||0),0);
-  const totalConf  = eventos.reduce((s,e)=>s+(e.conf||0),0);
-  const totalTotal = eventos.reduce((s,e)=>s+(e.total||0),0);
-  const taxaOcup   = totalVagas > 0 ? Math.round((totalConf/totalVagas)*100) : 0;
-
-  const chartDefaults = {
-    color: '#9090aa',
-    plugins: { legend: { labels: { color:'#9090aa', font:{ family:'DM Sans' } } } },
-    scales: {
-      x: { ticks:{ color:'#9090aa' }, grid:{ color:'#1e1e2e' } },
-      y: { ticks:{ color:'#9090aa' }, grid:{ color:'#1e1e2e' } }
+  // 1. Ocupação por evento
+  destroyChart('ocupacao');
+  const evOcup = data.porEvento || [];
+  chartInstances['ocupacao'] = new Chart(document.getElementById('chart-ocupacao'), {
+    type: 'bar',
+    data: {
+      labels: evOcup.map(e => e.nome.length > 20 ? e.nome.substring(0,18)+'…' : e.nome),
+      datasets: [
+        { label:'Confirmados', data: evOcup.map(e=>e.conf),  backgroundColor:'#00e5a0cc' },
+        { label:'Convidados',  data: evOcup.map(e=>e.pend),  backgroundColor:'#f5c542cc' },
+        { label:'Aguardando',  data: evOcup.map(e=>e.aprov), backgroundColor:'#ff8c42cc' },
+        { label:'Vagas livres',data: evOcup.map(e=>Math.max(0,e.vagas-e.conf-e.pend-e.aprov)), backgroundColor:'rgba(255,255,255,.08)' },
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:true,
+      scales: {
+        x: { stacked:true, ticks:{color:co.color,font:{size:10}}, grid:{color:co.grid} },
+        y: { stacked:true, ticks:{color:co.color}, grid:{color:co.grid} }
+      },
+      plugins: { legend:{ labels:{color:co.color,font:{size:11}} } }
     }
-  };
+  });
 
-  document.getElementById('analytics-content').innerHTML = `
-    <div class="kpi-row">
-      <div class="kpi b"><div class="kv" style="color:var(--blue)">${eventos.length}</div><div class="kl">Eventos analisados</div></div>
-      <div class="kpi g"><div class="kv" style="color:var(--green)">${totalConf}</div><div class="kl">Confirmados total</div></div>
-      <div class="kpi y"><div class="kv" style="color:var(--yellow)">${totalTotal}</div><div class="kl">Convidados total</div></div>
-      <div class="kpi p"><div class="kv" style="color:var(--purple)">${taxaOcup}%</div><div class="kl">Taxa de ocupação</div></div>
-    </div>
-    <div class="analytics-grid">
-      <!-- Ocupação por evento -->
-      <div class="chart-card wide">
-        <h3>Ocupação por evento</h3>
-        <div class="chart-wrap-tall"><canvas id="chart-ocupacao"></canvas></div>
-      </div>
-      <!-- Tipo + Evolução mensal -->
-      <div class="charts-row">
-        <div class="chart-card">
-          <h3>Taxa por tipo</h3>
-          <div class="chart-wrap"><canvas id="chart-tipo"></canvas></div>
-        </div>
-        <div class="chart-card">
-          <h3>Evolução mensal</h3>
-          <div class="chart-wrap"><canvas id="chart-mensal"></canvas></div>
-        </div>
-      </div>
-      <!-- Responsáveis + Objetivos -->
-      <div class="charts-row">
-        <div class="chart-card">
-          <h3>Ranking de responsáveis</h3>
-          <div class="chart-wrap"><canvas id="chart-resp"></canvas></div>
-        </div>
-        <div class="chart-card">
-          <h3>Distribuição de objetivos</h3>
-          <div class="chart-wrap"><canvas id="chart-obj"></canvas></div>
-        </div>
-      </div>
-    </div>`;
+  // 2. Taxa por tipo
+  destroyChart('tipo');
+  const tipos = data.porTipo || [];
+  chartInstances['tipo'] = new Chart(document.getElementById('chart-tipo'), {
+    type: 'doughnut',
+    data: {
+      labels: tipos.map(t => t.tipo),
+      datasets: [{ data: tipos.map(t=>t.conf), backgroundColor:['#00e5a0cc','#4da6ffcc','#f5c542cc','#ff8c42cc','#ff4d6dcc'] }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:true,
+      plugins: { legend:{ labels:{color:co.color,font:{size:12}} } }
+    }
+  });
 
-  // ── Gráfico 1: Ocupação por evento (barra horizontal)
-  {
-    const evOrdenados = [...eventos].sort((a,b)=>{
-      const ta = (a.vagas||1); const tb = (b.vagas||1);
-      return (b.conf/tb) - (a.conf/ta);
-    });
-    const ctx = document.getElementById('chart-ocupacao').getContext('2d');
-    analyticsCharts.push(new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: evOrdenados.map(e => e.nome),
-        datasets: [
-          { label:'Confirmados', data: evOrdenados.map(e=>e.conf||0),  backgroundColor:'rgba(0,229,160,.7)',  borderRadius:4 },
-          { label:'Convidados',  data: evOrdenados.map(e=>e.pend||0),  backgroundColor:'rgba(245,197,66,.6)', borderRadius:4 },
-          { label:'Aguardando',  data: evOrdenados.map(e=>e.aprov||0), backgroundColor:'rgba(255,140,66,.5)', borderRadius:4 },
-          { label:'Vagas',       data: evOrdenados.map(e=>Math.max(0,(e.vagas||0)-(e.conf||0)-(e.pend||0)-(e.aprov||0))), backgroundColor:'rgba(255,255,255,.07)', borderRadius:4 },
-        ]
+  // 3. Evolução mensal
+  destroyChart('mensal');
+  const meses = data.porMes || [];
+  const nomeMes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  chartInstances['mensal'] = new Chart(document.getElementById('chart-mensal'), {
+    type: 'line',
+    data: {
+      labels: meses.map(m => nomeMes[(m.mes||1)-1]),
+      datasets: [
+        { label:'Confirmados', data: meses.map(m=>m.conf),  borderColor:'#00e5a0', backgroundColor:'rgba(0,229,160,.1)', tension:.3, fill:true },
+        { label:'Convidados',  data: meses.map(m=>m.pend),  borderColor:'#f5c542', backgroundColor:'rgba(245,197,66,.08)', tension:.3, fill:true },
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:true,
+      scales: {
+        x: { ticks:{color:co.color}, grid:{color:co.grid} },
+        y: { ticks:{color:co.color}, grid:{color:co.grid} }
       },
-      options: {
-        responsive:true, maintainAspectRatio:false,
-        plugins: { legend: { labels:{ color:'#9090aa', font:{family:'DM Sans'} } } },
-        scales: {
-          x: { stacked:true, ticks:{ color:'#9090aa', maxRotation:35 }, grid:{ color:'#1e1e2e' } },
-          y: { stacked:true, ticks:{ color:'#9090aa' }, grid:{ color:'#1e1e2e' } }
-        }
-      }
-    }));
-  }
+      plugins: { legend:{ labels:{color:co.color,font:{size:11}} } }
+    }
+  });
 
-  // ── Gráfico 2: Taxa por tipo (donut)
-  {
-    const tiposKeys = Object.keys(porTipo);
-    const tipoColors = { 'Jogo':'rgba(77,166,255,.8)', 'Show':'rgba(176,109,255,.8)', 'Outros':'rgba(255,140,66,.8)' };
-    const ctx = document.getElementById('chart-tipo').getContext('2d');
-    analyticsCharts.push(new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: tiposKeys,
-        datasets: [{
-          data: tiposKeys.map(k => porTipo[k].conf || 0),
-          backgroundColor: tiposKeys.map(k => tipoColors[k] || 'rgba(144,144,170,.6)'),
-          borderWidth: 0, hoverOffset: 6
-        }]
+  // 4. Ranking responsáveis
+  destroyChart('resp');
+  const resps = (data.porResp || []).slice(0,10);
+  chartInstances['resp'] = new Chart(document.getElementById('chart-resp'), {
+    type: 'bar',
+    data: {
+      labels: resps.map(r => r.resp),
+      datasets: [{ label:'Confirmados', data: resps.map(r=>r.conf), backgroundColor:'#4da6ffcc' }]
+    },
+    options: {
+      indexAxis:'y', responsive:true, maintainAspectRatio:true,
+      scales: {
+        x: { ticks:{color:co.color}, grid:{color:co.grid} },
+        y: { ticks:{color:co.color,font:{size:11}}, grid:{color:co.grid} }
       },
-      options: {
-        responsive:true, maintainAspectRatio:false, cutout:'65%',
-        plugins: { legend:{ position:'bottom', labels:{ color:'#9090aa', font:{family:'DM Sans'}, padding:14 } } }
-      }
-    }));
-  }
+      plugins: { legend:{display:false} }
+    }
+  });
 
-  // ── Gráfico 3: Evolução mensal (linha)
-  {
-    const ctx = document.getElementById('chart-mensal').getContext('2d');
-    analyticsCharts.push(new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: porMes.map(m => MNAMES[(m.mes||1)-1]),
-        datasets: [
-          { label:'Confirmados', data: porMes.map(m=>m.conf||0),  borderColor:'#00e5a0', backgroundColor:'rgba(0,229,160,.1)', tension:.4, fill:true, pointBackgroundColor:'#00e5a0' },
-          { label:'Convidados',  data: porMes.map(m=>m.total||0), borderColor:'#f5c542', backgroundColor:'rgba(245,197,66,.05)', tension:.4, fill:false, pointBackgroundColor:'#f5c542' },
-        ]
-      },
-      options: {
-        responsive:true, maintainAspectRatio:false,
-        plugins: { legend:{ labels:{ color:'#9090aa', font:{family:'DM Sans'} } } },
-        scales: {
-          x: { ticks:{ color:'#9090aa' }, grid:{ color:'#1e1e2e' } },
-          y: { ticks:{ color:'#9090aa' }, grid:{ color:'#1e1e2e' }, beginAtZero:true }
-        }
-      }
-    }));
-  }
-
-  // ── Gráfico 4: Ranking responsáveis (barra horizontal)
-  {
-    const top = responsaveis.slice(0, 10);
-    const ctx = document.getElementById('chart-resp').getContext('2d');
-    analyticsCharts.push(new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: top.map(r => r.nome),
-        datasets: [{ label:'Convidados', data: top.map(r=>r.total), backgroundColor:'rgba(77,166,255,.7)', borderRadius:4 }]
-      },
-      options: {
-        indexAxis:'y', responsive:true, maintainAspectRatio:false,
-        plugins: { legend:{ display:false } },
-        scales: {
-          x: { ticks:{ color:'#9090aa' }, grid:{ color:'#1e1e2e' }, beginAtZero:true },
-          y: { ticks:{ color:'#9090aa' }, grid:{ color:'transparent' } }
-        }
-      }
-    }));
-  }
-
-  // ── Gráfico 5: Distribuição de objetivos (donut)
-  {
-    const objColors = ['rgba(0,229,160,.8)','rgba(77,166,255,.8)','rgba(245,197,66,.8)','rgba(176,109,255,.8)','rgba(255,140,66,.8)','rgba(255,77,109,.8)','rgba(144,144,170,.6)'];
-    const topObj = objetivos.slice(0,7);
-    const ctx = document.getElementById('chart-obj').getContext('2d');
-    analyticsCharts.push(new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: topObj.map(o => o.obj),
-        datasets: [{
-          data: topObj.map(o => o.total),
-          backgroundColor: topObj.map((_,i) => objColors[i % objColors.length]),
-          borderWidth: 0, hoverOffset: 6
-        }]
-      },
-      options: {
-        responsive:true, maintainAspectRatio:false, cutout:'60%',
-        plugins: { legend:{ position:'bottom', labels:{ color:'#9090aa', font:{family:'DM Sans'}, padding:10 } } }
-      }
-    }));
-  }
+  // 5. Distribuição objetivos
+  destroyChart('obj');
+  const objs = data.porObj || [];
+  chartInstances['obj'] = new Chart(document.getElementById('chart-obj'), {
+    type: 'doughnut',
+    data: {
+      labels: objs.map(o => o.obj),
+      datasets: [{ data: objs.map(o=>o.total), backgroundColor:['#00e5a0cc','#4da6ffcc','#f5c542cc','#ff8c42cc','#ff4d6dcc','#a855f7cc'] }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:true,
+      plugins: { legend:{ labels:{color:co.color,font:{size:12}} } }
+    }
+  });
 }
 
-// ── TECLADO ───────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
+  if (e.key==='Escape') {
     if (document.getElementById('status-overlay').classList.contains('open')) closeStatusModal();
     else if (document.getElementById('form-overlay').classList.contains('open')) closeAddGuest();
     else closeModal();
   }
 });
 
+// Inicializar com mês atual ativo
+document.getElementById('mf-' + currentMonth).classList.add('active');
 loadDashboard();
 </script>
 </body>
