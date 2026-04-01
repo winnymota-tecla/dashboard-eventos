@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tecla T · Analytics Camarote 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg:#050508; --s1:#0d0d14; --s2:#13131e; --s3:#1a1a28;
+  --border:#1e1e30; --border2:#2a2a40;
+  --green:#00e5a0; --green2:rgba(0,229,160,.08);
+  --yellow:#f5c542; --orange:#ff8c42; --red:#ff4d6d;
+  --blue:#4da6ff; --purple:#a78bfa;
+  --text:#e8e8f4; --dim:#7070a0;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:"DM Mono",monospace; min-height:100vh; }
+body::before {
+  content:""; position:fixed; inset:0;
+  background-image:linear-gradient(rgba(0,229,160,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,160,.015) 1px,transparent 1px);
+  background-size:60px 60px; pointer-events:none; z-index:0;
+}
+.wrap { max-width:1400px; margin:0 auto; padding:40px 32px; position:relative; z-index:1; }
+
+/* HEADER */
+.header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:48px; flex-wrap:wrap; gap:24px; }
+.header-left h1 { font-family:"Syne",sans-serif; font-size:48px; font-weight:800; letter-spacing:-1px; line-height:1; }
+.header-left h1 span { color:var(--green); }
+.header-left p { font-size:11px; color:var(--dim); letter-spacing:3px; text-transform:uppercase; margin-top:6px; }
+
+/* FILTROS */
+.filters { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.filter-label { font-size:10px; color:var(--dim); letter-spacing:2px; text-transform:uppercase; margin-right:4px; }
+.filter-btn { background:var(--s2); border:1px solid var(--border); color:var(--dim); font-family:"DM Mono",monospace; font-size:11px; padding:7px 14px; border-radius:6px; cursor:pointer; transition:all .15s; letter-spacing:1px; }
+.filter-btn:hover { border-color:var(--border2); color:var(--text); }
+.filter-btn.active { background:var(--green2); border-color:var(--green); color:var(--green); }
+
+/* KPIs */
+.kpi-strip { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; margin-bottom:32px; }
+.kpi { background:var(--s1); border:1px solid var(--border); border-radius:12px; padding:20px; position:relative; overflow:hidden; }
+.kpi::after { content:""; position:absolute; top:0; left:0; right:0; height:2px; border-radius:12px 12px 0 0; }
+.kpi.g::after{background:var(--green)} .kpi.y::after{background:var(--yellow)} .kpi.b::after{background:var(--blue)} .kpi.p::after{background:var(--purple)} .kpi.o::after{background:var(--orange)}
+.kpi-val { font-family:"Syne",sans-serif; font-size:36px; font-weight:800; line-height:1; display:block; }
+.kpi.g .kpi-val{color:var(--green)} .kpi.y .kpi-val{color:var(--yellow)} .kpi.b .kpi-val{color:var(--blue)} .kpi.p .kpi-val{color:var(--purple)} .kpi.o .kpi-val{color:var(--orange)}
+.kpi-label { font-size:10px; color:var(--dim); text-transform:uppercase; letter-spacing:2px; margin-top:6px; display:block; }
+
+/* CARDS */
+.charts-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+@media(max-width:900px){.charts-grid{grid-template-columns:1fr}}
+.card { background:var(--s1); border:1px solid var(--border); border-radius:16px; padding:24px; }
+.card-title { font-family:"Syne",sans-serif; font-size:14px; font-weight:700; color:var(--text); margin-bottom:4px; }
+.card-sub { font-size:10px; color:var(--dim); letter-spacing:2px; text-transform:uppercase; margin-bottom:20px; }
+
+/* TABELA VACÂNCIA */
+.vac-table { width:100%; border-collapse:collapse; }
+.vac-table th { font-size:9px; color:var(--dim); text-transform:uppercase; letter-spacing:2px; padding:0 12px 10px; text-align:left; border-bottom:1px solid var(--border); }
+.vac-table td { padding:10px 12px; font-size:12px; border-bottom:1px solid var(--border); vertical-align:middle; }
+.vac-table tr:last-child td { border-bottom:none; }
+.vac-table tr:hover td { background:rgba(255,255,255,.02); }
+.vac-bar-wrap { width:100px; height:6px; background:var(--border); border-radius:99px; overflow:hidden; display:inline-block; vertical-align:middle; }
+.vac-bar { height:100%; border-radius:99px; }
+.pct-tag { font-size:11px; font-weight:500; margin-left:8px; }
+.loc-dot { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:6px; }
+
+/* RANKING */
+.rank-list { display:flex; flex-direction:column; gap:8px; }
+.rank-item { display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--s2); border-radius:10px; border:1px solid var(--border); }
+.rank-num { font-family:"Syne",sans-serif; font-size:18px; font-weight:800; color:var(--dim); width:24px; flex-shrink:0; }
+.rank-num.top { color:var(--green); }
+.rank-info { flex:1; min-width:0; }
+.rank-name { font-size:13px; font-weight:500; }
+.rank-sub { font-size:10px; color:var(--dim); margin-top:2px; }
+.rank-val { font-family:"Syne",sans-serif; font-size:20px; font-weight:700; color:var(--green); flex-shrink:0; }
+
+/* EMPRESAS */
+.emp-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:8px; }
+.emp-card { background:var(--s2); border:1px solid var(--border); border-radius:10px; padding:12px; }
+.emp-name { font-size:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:4px; color:var(--dim); }
+.emp-count { font-family:"Syne",sans-serif; font-size:22px; font-weight:700; color:var(--blue); }
+.emp-sub { font-size:10px; color:var(--dim); }
+
+.footer { margin-top:48px; padding-top:24px; border-top:1px solid var(--border); display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+.footer-note { font-size:10px; color:var(--dim); letter-spacing:2px; text-transform:uppercase; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="header-left">
+      <h1>TECLA T <span>·</span> ANALYTICS</h1>
+      <p>Camarote 2026 · Apenas eventos encerrados · Apenas convidados com CPF</p>
+    </div>
+    <div class="filters">
+      <span class="filter-label">Camarote</span>
+      <button class="filter-btn active" data-loc="todos">Todos</button>
+      <button class="filter-btn" data-loc="Santos">Santos</button>
+      <button class="filter-btn" data-loc="Allianz">Allianz</button>
+      <button class="filter-btn" data-loc="Fortaleza">Fortaleza</button>
+    </div>
+  </div>
+
+  <div class="kpi-strip" id="kpis"></div>
+
+  <div class="charts-grid" style="margin-bottom:16px">
+    <div class="card" style="grid-column:1/-1">
+      <div class="card-title">Vacância por evento</div>
+      <div class="card-sub">Confirmados vs vagas desperdiçadas</div>
+      <div style="position:relative;height:280px"><canvas id="chartVacancia"></canvas></div>
+    </div>
+  </div>
+
+  <div class="charts-grid" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-title">Taxa de ocupação por camarote</div>
+      <div class="card-sub">% confirmados sobre total de vagas</div>
+      <div style="position:relative;height:260px"><canvas id="chartOcupacao"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Motivo dos convites</div>
+      <div class="card-sub">Distribuição por objetivo</div>
+      <div style="position:relative;height:260px"><canvas id="chartObjetivos"></canvas></div>
+    </div>
+  </div>
+
+  <div class="charts-grid" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-title">Evolução mensal</div>
+      <div class="card-sub">Confirmados vs vagas totais por mês</div>
+      <div style="position:relative;height:240px"><canvas id="chartMensal"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Detalhe de vacância</div>
+      <div class="card-sub">Ordenado por mais vagas desperdiçadas</div>
+      <div style="max-height:280px;overflow-y:auto">
+        <table class="vac-table" id="tableVacancia"></table>
+      </div>
+    </div>
+  </div>
+
+  <div class="charts-grid" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-title">Ranking de responsáveis</div>
+      <div class="card-sub">Total de convidados com CPF levados</div>
+      <div class="rank-list" id="rankResp"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Top empresas impactadas</div>
+      <div class="card-sub">Pessoas por empresa (excl. Tecla T)</div>
+      <div class="emp-grid" id="topEmpresas"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="footer-note" id="footer-txt">carregando...</span>
+    <span class="footer-note">Tecla T · 2026</span>
+  </div>
+</div>
+
+<script>
+const API_ANALYTICS = 'https://script.google.com/macros/s/AKfycbz-2mTKK-AhCg8LPtRMswGa1oshc38lbdLNjVCDw9C4NICStx0qMrvDtYbCPtTAaLpR/exec';
+let DADOS = [];
+
+async function loadDados() {
+  document.getElementById("footer-txt").textContent = "Carregando dados...";
+  try {
+    const res  = await fetch(API_ANALYTICS);
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error);
+    DADOS = json.eventos;
+    render();
+  } catch(e) {
+    document.getElementById("footer-txt").textContent = "Erro ao carregar: " + e.message;
+  }
+}
+
+const LOC_COLORS = {Santos:"#4da6ff",Allianz:"#a78bfa",Fortaleza:"#00e5a0",Outros:"#ff8c42"};
+const OBJ_COLORS = ["#00e5a0","#4da6ff","#f5c542","#a78bfa","#ff8c42","#ff4d6d","#60d394","#adb5bd","#c084fc","#fb923c"];
+const MESES = {1:"Jan",2:"Fev",3:"Mar",4:"Abr",5:"Mai",6:"Jun"};
+let filtroLoc = "todos";
+let charts = {};
+
+function isConf(s) {
+  return ["confirmado","cadastrado","presente"].some(x => s.toLowerCase().includes(x));
+}
+
+function getFiltered() {
+  return DADOS.filter(e => filtroLoc === "todos" || e.local_norm === filtroLoc);
+}
+
+function normResp(r) {
+  if (!r) return "Sem responsável";
+  if (r === "EndoMKT" || r === "Endo MKT") return "Endomarketing";
+  return r;
+}
+
+function renderKPIs(ev) {
+  const totalVagas = ev.reduce((s,e) => s + e.vagas, 0);
+  const totalConv  = ev.reduce((s,e) => s + e.total, 0);
+  const totalConf  = ev.reduce((s,e) => s + e.convidados.filter(c => isConf(c.status)).length, 0);
+  const totalVac   = ev.reduce((s,e) => s + Math.max(0, e.vagas - e.convidados.filter(c => isConf(c.status)).length), 0);
+  const txOcup     = totalVagas > 0 ? Math.round(totalConf / totalVagas * 100) : 0;
+  const empresas   = new Set(ev.flatMap(e => e.convidados.map(c => c.empresa).filter(x => x && x !== "Tecla T" && x !== "Tecla  T" && x !== "Acompanhante")));
+  document.getElementById("kpis").innerHTML =
+    `<div class="kpi g"><span class="kpi-val">${ev.length}</span><span class="kpi-label">Eventos analisados</span></div>` +
+    `<div class="kpi b"><span class="kpi-val">${totalConv}</span><span class="kpi-label">Convidados com CPF</span></div>` +
+    `<div class="kpi g"><span class="kpi-val">${totalConf}</span><span class="kpi-label">Confirmados</span></div>` +
+    `<div class="kpi y"><span class="kpi-val">${txOcup}%</span><span class="kpi-label">Taxa de ocupação</span></div>` +
+    `<div class="kpi o"><span class="kpi-val">${totalVac}</span><span class="kpi-label">Vagas desperdiçadas</span></div>` +
+    `<div class="kpi p"><span class="kpi-val">${empresas.size}</span><span class="kpi-label">Empresas impactadas</span></div>`;
+  document.getElementById("footer-txt").textContent = ev.length + " eventos analisados · somente convidados com CPF";
+}
+
+function renderVacancia(ev) {
+  const labels = ev.map(e => e.nome.length > 22 ? e.nome.slice(0,20)+"…" : e.nome);
+  const conf   = ev.map(e => e.convidados.filter(c => isConf(c.status)).length);
+  const vac    = ev.map((e,i) => Math.max(0, e.vagas - conf[i]));
+  const bgConf = ev.map(e => (LOC_COLORS[e.local_norm] || "#00e5a0") + "cc");
+  if (charts.vac) charts.vac.destroy();
+  charts.vac = new Chart(document.getElementById("chartVacancia"), {
+    type:"bar",
+    data:{ labels, datasets:[
+      {label:"Confirmados", data:conf, backgroundColor:bgConf, borderRadius:4, borderSkipped:false},
+      {label:"Vagas desperdiçadas", data:vac, backgroundColor:"rgba(255,77,109,.25)", borderRadius:4, borderSkipped:false}
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:"#7070a0",font:{family:"DM Mono",size:11}}},
+               tooltip:{callbacks:{afterLabel:(ctx) => {
+                 const e = ev[ctx.dataIndex];
+                 const c = e.convidados.filter(x => isConf(x.status)).length;
+                 return "Ocupação: " + (e.vagas > 0 ? Math.round(c/e.vagas*100) : 0) + "%";
+               }}}},
+      scales:{
+        x:{stacked:true, ticks:{color:"#7070a0",font:{family:"DM Mono",size:10}}, grid:{color:"rgba(255,255,255,.03)"}},
+        y:{stacked:true, ticks:{color:"#7070a0",font:{family:"DM Mono",size:10}}, grid:{color:"rgba(255,255,255,.05)"}}
+      }
+    }
+  });
+}
+
+function renderOcupacao(ev) {
+  const locs = ["Santos","Allianz","Fortaleza","Outros"].filter(l => ev.some(e => e.local_norm === l));
+  const data = locs.map(l => {
+    const evs   = ev.filter(e => e.local_norm === l);
+    const vagas = evs.reduce((s,e) => s + e.vagas, 0);
+    const conf  = evs.reduce((s,e) => s + e.convidados.filter(c => isConf(c.status)).length, 0);
+    return vagas > 0 ? Math.round(conf/vagas*100) : 0;
+  });
+  if (charts.ocup) charts.ocup.destroy();
+  charts.ocup = new Chart(document.getElementById("chartOcupacao"), {
+    type:"bar",
+    data:{labels:locs, datasets:[{data, backgroundColor:locs.map(l => (LOC_COLORS[l]||"#888")+"99"), borderColor:locs.map(l => LOC_COLORS[l]||"#888"), borderWidth:1, borderRadius:8, borderSkipped:false}]},
+    options:{
+      responsive:true, maintainAspectRatio:false, indexAxis:"y",
+      plugins:{legend:{display:false}, tooltip:{callbacks:{label:ctx => " " + ctx.raw + "% de ocupação"}}},
+      scales:{
+        x:{max:100, ticks:{color:"#7070a0",callback:v=>v+"%",font:{family:"DM Mono",size:10}}, grid:{color:"rgba(255,255,255,.05)"}},
+        y:{ticks:{color:"#7070a0",font:{family:"DM Mono",size:11}}, grid:{display:false}}
+      }
+    }
+  });
+}
+
+function renderObjetivos(ev) {
+  const counts = {};
+  ev.forEach(e => e.convidados.forEach(c => {
+    const o = c.objetivo || "Não informado";
+    counts[o] = (counts[o]||0) + 1;
+  }));
+  const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+  if (charts.obj) charts.obj.destroy();
+  charts.obj = new Chart(document.getElementById("chartObjetivos"), {
+    type:"doughnut",
+    data:{labels:sorted.map(x=>x[0]), datasets:[{data:sorted.map(x=>x[1]), backgroundColor:OBJ_COLORS.slice(0,sorted.length), borderWidth:0, hoverOffset:6}]},
+    options:{
+      responsive:true, maintainAspectRatio:false, cutout:"65%",
+      plugins:{
+        legend:{position:"right",labels:{color:"#9090aa",font:{family:"DM Mono",size:10},boxWidth:10,padding:10}},
+        tooltip:{callbacks:{label:ctx => " " + ctx.label + ": " + ctx.raw + " pessoa" + (ctx.raw>1?"s":"")}}
+      }
+    }
+  });
+}
+
+function renderMensal(ev) {
+  const porMes = {};
+  ev.forEach(e => {
+    const m = parseInt(e.data.split("-")[1]);
+    if (!porMes[m]) porMes[m] = {conf:0,vagas:0};
+    porMes[m].conf  += e.convidados.filter(c => isConf(c.status)).length;
+    porMes[m].vagas += e.vagas;
+  });
+  const meses  = Object.keys(porMes).map(Number).sort();
+  const labels = meses.map(m => MESES[m] || "Mês "+m);
+  if (charts.men) charts.men.destroy();
+  charts.men = new Chart(document.getElementById("chartMensal"), {
+    type:"line",
+    data:{labels, datasets:[
+      {label:"Confirmados", data:meses.map(m=>porMes[m].conf), borderColor:"#00e5a0", backgroundColor:"rgba(0,229,160,.08)", fill:true, tension:.4, pointBackgroundColor:"#00e5a0", pointRadius:5},
+      {label:"Vagas totais", data:meses.map(m=>porMes[m].vagas), borderColor:"rgba(255,255,255,.15)", backgroundColor:"transparent", borderDash:[4,4], tension:.4, pointRadius:3, pointBackgroundColor:"rgba(255,255,255,.3)"}
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:"#7070a0",font:{family:"DM Mono",size:10}}}},
+      scales:{
+        x:{ticks:{color:"#7070a0",font:{family:"DM Mono",size:10}}, grid:{color:"rgba(255,255,255,.03)"}},
+        y:{ticks:{color:"#7070a0",font:{family:"DM Mono",size:10}}, grid:{color:"rgba(255,255,255,.05)"}}
+      }
+    }
+  });
+}
+
+function renderTabelaVacancia(ev) {
+  const sorted = [...ev].sort((a,b) => {
+    const va = Math.max(0, a.vagas - a.convidados.filter(c=>isConf(c.status)).length);
+    const vb = Math.max(0, b.vagas - b.convidados.filter(c=>isConf(c.status)).length);
+    return vb - va;
+  });
+  const rows = sorted.map(e => {
+    const c   = e.convidados.filter(x => isConf(x.status)).length;
+    const vac = Math.max(0, e.vagas - c);
+    const pct = e.vagas > 0 ? Math.round(c/e.vagas*100) : 0;
+    const col = LOC_COLORS[e.local_norm] || "#888";
+    const bc  = pct >= 80 ? "#00e5a0" : pct >= 50 ? "#f5c542" : "#ff4d6d";
+    const d   = e.data.split("-"); const fmt = d[2]+"/"+d[1];
+    return "<tr><td><span class=\"loc-dot\" style=\"background:"+col+"\"></span>"+(e.nome.length>22?e.nome.slice(0,20)+"…":e.nome)+"</td><td style=\"color:var(--dim)\">"+fmt+"</td><td>"+e.vagas+"</td><td style=\"color:var(--green)\">"+c+"</td><td style=\"color:var(--red)\">"+vac+"</td><td><span class=\"vac-bar-wrap\"><span class=\"vac-bar\" style=\"width:"+pct+"%;background:"+bc+"\"></span></span><span class=\"pct-tag\" style=\"color:"+bc+"\">"+pct+"%</span></td></tr>";
+  }).join("");
+  document.getElementById("tableVacancia").innerHTML = "<thead><tr><th>Evento</th><th>Data</th><th>Vagas</th><th>Conf.</th><th>Vac.</th><th>Ocupação</th></tr></thead><tbody>"+rows+"</tbody>";
+}
+
+function renderRanking(ev) {
+  const counts = {};
+  ev.forEach(e => e.convidados.forEach(c => {
+    const r = normResp(c.resp);
+    if (r === "Sem responsável" || r === "Endomarketing") return;
+    counts[r] = (counts[r]||0) + 1;
+  }));
+  const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0,8);
+  document.getElementById("rankResp").innerHTML = sorted.map(([nome,total],i) => {
+    const evts = new Set(ev.filter(e => e.convidados.some(c => normResp(c.resp) === nome)).map(e=>e.nome)).size;
+    return "<div class=\"rank-item\"><span class=\"rank-num "+(i<3?"top":"")+"\">"+(i+1<10?"0"+(i+1):i+1)+"</span><div class=\"rank-info\"><div class=\"rank-name\">"+nome+"</div><div class=\"rank-sub\">"+evts+" evento"+(evts>1?"s":"")+"</div></div><span class=\"rank-val\">"+total+"</span></div>";
+  }).join("");
+}
+
+function renderEmpresas(ev) {
+  const counts = {};
+  ev.forEach(e => e.convidados.forEach(c => {
+    const emp = (c.empresa||"").trim();
+    if (!emp || emp === "Tecla T" || emp === "Tecla  T" || emp === "Acompanhante") return;
+    counts[emp] = (counts[emp]||0) + 1;
+  }));
+  const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0,12);
+  document.getElementById("topEmpresas").innerHTML = sorted.map(([nome,total]) =>
+    "<div class=\"emp-card\"><div class=\"emp-name\" title=\""+nome+"\">"+nome+"</div><div class=\"emp-count\">"+total+"</div><div class=\"emp-sub\">pessoa"+(total>1?"s":"")+"</div></div>"
+  ).join("");
+}
+
+function render() {
+  const ev = getFiltered();
+  renderKPIs(ev);
+  renderVacancia(ev);
+  renderOcupacao(ev);
+  renderObjetivos(ev);
+  renderMensal(ev);
+  renderTabelaVacancia(ev);
+  renderRanking(ev);
+  renderEmpresas(ev);
+}
+
+document.querySelectorAll("[data-loc]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("[data-loc]").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    filtroLoc = btn.dataset.loc;
+    render();
+  });
+});
+
+loadDados();
+</script>
+</body>
+</html>
