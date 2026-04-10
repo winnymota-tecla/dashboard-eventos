@@ -300,24 +300,36 @@ function render() {
 }
 
 // ── KPIs ─────────────────────────────────────────────────────
+function empUnicas(evs) {
+  const excluir = ["Tecla T","Tecla  T","Acompanhante"];
+  const vistas  = new Set();
+  const result  = new Set();
+  evs.forEach(e => e.convidados.forEach(c => {
+    if (!OBJ_EMPRESA.includes(c.objetivo)) return;
+    const emp = (c.empresa||"").trim();
+    if (!emp || excluir.includes(emp)) return;
+    const chave = (c.nome||"").trim().toLowerCase() + "|" + emp.toLowerCase();
+    if (!vistas.has(chave)) { vistas.add(chave); result.add(emp); }
+  }));
+  return result;
+}
+
 function renderKPIs(ev) {
   const totalVagas = ev.reduce((s,e) => s + e.vagas, 0);
-  const totalConv  = ev.reduce((s,e) => s + e.total, 0);
   const totalConf  = ev.reduce((s,e) => s + e.convidados.filter(c => isConf(c.status)).length, 0);
   const totalVac   = ev.reduce((s,e) => s + Math.max(0, e.vagas - e.convidados.filter(c => isConf(c.status)).length), 0);
   const txOcup     = totalVagas > 0 ? Math.round(totalConf/totalVagas*100) : 0;
-  // Só conta empresas de objetivos comerciais
-  const empresas   = new Set(ev.flatMap(e => e.convidados
-    .filter(c => OBJ_EMPRESA.includes(c.objetivo) && c.empresa && c.empresa !== "Tecla T" && c.empresa !== "Tecla  T" && c.empresa !== "Acompanhante")
-    .map(c => c.empresa)));
+  const empresas   = empUnicas(ev);
+  const convLabel  = filtroVisao === "comercial" ? "Convidados comercial" : "Convidados com CPF";
+  const totalConv  = ev.reduce((s,e) => s + e.convidados.length, 0);
   document.getElementById("kpis").innerHTML =
     `<div class="kpi g"><span class="kpi-val">${ev.length}</span><span class="kpi-label">Eventos analisados</span></div>` +
-    `<div class="kpi b"><span class="kpi-val">${totalConv}</span><span class="kpi-label">Convidados com CPF</span></div>` +
+    `<div class="kpi b"><span class="kpi-val">${totalConv}</span><span class="kpi-label">${convLabel}</span></div>` +
     `<div class="kpi g"><span class="kpi-val">${totalConf}</span><span class="kpi-label">Confirmados</span></div>` +
     `<div class="kpi y"><span class="kpi-val">${txOcup}%</span><span class="kpi-label">Taxa de ocupação</span></div>` +
     `<div class="kpi o"><span class="kpi-val">${totalVac}</span><span class="kpi-label">Vagas desperdiçadas</span></div>` +
     `<div class="kpi p"><span class="kpi-val">${empresas.size}</span><span class="kpi-label">Empresas impactadas</span></div>`;
-  const modo = filtroVisao === "comercial" ? " · visão comercial (vagas e responsáveis comerciais)" : " · somente convidados com CPF";
+  const modo = filtroVisao === "comercial" ? " · visão comercial" : " · somente convidados com CPF";
   document.getElementById("footer-txt").textContent = ev.length + " eventos" + modo;
 }
 
@@ -466,20 +478,27 @@ function renderRanking(ev) {
 
 // ── EMPRESAS (só objetivos comerciais) ────────────────────────
 function renderEmpresas(ev) {
+  const excluir = ["Tecla T","Tecla  T","Acompanhante"];
   const counts = {};
   ev.forEach(e => e.convidados.forEach(c => {
     if (!OBJ_EMPRESA.includes(c.objetivo)) return;
     const emp = (c.empresa||"").trim();
-    if (!emp || emp==="Tecla T" || emp==="Tecla  T" || emp==="Acompanhante") return;
-    if (!counts[emp]) counts[emp] = [];
-    counts[emp].push({...c, evento:e.nome, data:e.data});
+    if (!emp || excluir.includes(emp)) return;
+    if (!counts[emp]) counts[emp] = { pessoas: [], nomes: new Set() };
+    const nomeKey = (c.nome||"").trim().toLowerCase();
+    if (!counts[emp].nomes.has(nomeKey)) {
+      counts[emp].nomes.add(nomeKey);
+      counts[emp].pessoas.push({...c, evento:e.nome, data:e.data});
+    }
   }));
-  const sorted = Object.entries(counts).sort((a,b)=>b[1].length-a[1].length).slice(0,12);
+  const sorted = Object.entries(counts)
+    .map(([nome,v]) => [nome, v.pessoas])
+    .sort((a,b)=>b[1].length-a[1].length).slice(0,12);
   document.getElementById("topEmpresas").innerHTML = sorted.map(([nome,pessoas]) =>
-    `<div class="emp-card" onclick="openModalEmpresa('${nome.replace(/'/g,"\\'")}',DADOS)">
+    `<div class="emp-card" onclick="openModalEmpresa('${nome.replace(/'/g,"\'")}',DADOS)">
       <div class="emp-name" title="${nome}">${nome}</div>
       <div class="emp-count">${pessoas.length}</div>
-      <div class="emp-sub">pessoa${pessoas.length>1?"s":""}</div>
+      <div class="emp-sub">pessoa${pessoas.length>1?"s":""} única${pessoas.length>1?"s":""}</div>
     </div>`
   ).join("");
 }
